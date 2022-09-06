@@ -11,6 +11,9 @@ export default class Addresses {
   @Column({ length: 8 })
   zipCode: string;
 
+  @Column({ length: 60 })
+  street: string;
+
   @Column({ length: 6, nullable: true })
   number: string;
 
