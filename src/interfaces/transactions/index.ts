@@ -1,4 +1,4 @@
-export interface transactions {
+export interface ITransaction {
 	amount: number
 	categoryTypeId: string
 	receiverWalletId: string

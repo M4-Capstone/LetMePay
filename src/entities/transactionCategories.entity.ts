@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export default class TransactionCategories {
-  @PrimaryGeneratedColumn("increment", { type: "bigint" })
-  id: number;
+	@PrimaryGeneratedColumn('increment', { type: 'integer' })
+	id: number
 
-  @Column({ length: 2 })
-  type: string;
+	@Column({ length: 2 })
+	type: string
 }
