@@ -1,5 +1,6 @@
 import AppDataSource from "../../data-source";
 import Users from "../../entities/users.entity";
+import { AppError } from "../../errors/AppError";
 
 const getCurrentUserService = async (id: string) => {
   const userRepository = AppDataSource.getRepository(Users);
@@ -9,11 +10,11 @@ const getCurrentUserService = async (id: string) => {
   });
 
   if (!findUser) {
-    throw new Error("User not found");
+    throw new AppError("User not found", 404);
   }
 
   if (!findUser?.isActive) {
-    throw new Error("User inactive");
+    throw new AppError("User inactive", 404);
   }
 
   // const removePassword = (user: Users) => {
