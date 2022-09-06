@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import getCurrentUserService from "../services/users/getCurrentUser.service";
+import getUserbyKeyword from "../services/users/getUserByKeyword.service";
 
 const getCurrentUserController = async (req: Request, res: Response) => {
   const id = req.user.id;
@@ -8,4 +9,12 @@ const getCurrentUserController = async (req: Request, res: Response) => {
   return res.json(user);
 };
 
-export { getCurrentUserController };
+const getUserKeywordController = async (req: Request, res: Response) => {
+  const { keyword } = req.params;
+
+  const user = await getUserbyKeyword(keyword);
+
+  return res.json(user);
+};
+
+export { getCurrentUserController, getUserKeywordController };
