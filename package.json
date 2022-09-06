@@ -5,6 +5,10 @@
   "repository": "git@github.com:M4-Capstone/LetMePay.git",
   "author": "<pedroblizz@outlook.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --ignore-watch node_modules src/app.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.9",
