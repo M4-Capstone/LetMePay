@@ -10,6 +10,7 @@ export default class Addresses {
 
   @Column({ length: 8 })
   zipCode: string;
+  //Adicionar street
 
   @Column({ length: 6, nullable: true })
   number: string;
