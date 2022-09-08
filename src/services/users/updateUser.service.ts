@@ -2,7 +2,7 @@ import AppDataSource from "../../data-source"
 import Users from "../../entities/users.entity"
 import { AppError } from "../../errors/AppError"
 import { IUserUpdate } from "../../interfaces/users"
-import * as bcrypt from "bcrypt"
+import * as bcrypt from "bcryptjs"
 
 export const updateUserService = async (id:string, {name, email, password}:IUserUpdate): Promise<Users> => {
 
