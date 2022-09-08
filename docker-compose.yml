@@ -7,11 +7,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - DB_HOST=db
-      - DB_PASSWORD=1234
-      - DB=capstone_m4
-      - DB_USER=os_guri
-      - SECRET_KEY=sua_chave_secreta
+      - .env
     depends_on:
       db:
         condition: service_healthy
