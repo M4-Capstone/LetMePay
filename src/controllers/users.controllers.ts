@@ -1,14 +1,22 @@
 import { Request, Response } from "express";
-import { deleteUserService } from "../services/users/deleteUser.service";
+import { instanceToPlain } from "class-transformer";
+import { IUserRequest } from "../interfaces/users";
+import createUserService from "../services/users/createUser.service";
 import getCurrentUserService from "../services/users/getCurrentUser.service";
+import { deleteUserService } from "../services/users/deleteUser.service";
 import { updateUserService } from "../services/users/updateUser.service";
-import {instanceToPlain} from "class-transformer"
 
 const getCurrentUserController = async (req: Request, res: Response) => {
   const id = req.user.id;
   const user = await getCurrentUserService(id);
 
   return res.json(user);
+};
+
+const createUserController = async (req: Request, res: Response) => {
+  const userData: IUserRequest = req.body;
+  const newUser = await createUserService(userData);
+  return res.status(201).json(instanceToPlain(newUser));
 };
 
 const deleteUserController = async (req:Request, res:Response) =>{
@@ -33,4 +41,4 @@ const updateUserController = async (req:Request, res:Response) =>{
 
 } 
 
-export { getCurrentUserController, deleteUserController, updateUserController };
+export { getCurrentUserController, createUserController, deleteUserController, updateUserController };
