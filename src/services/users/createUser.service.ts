@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import AppDataSource from "../../data-source";
 import Users from "../../entities/users.entity";
 import { AppError } from "../../errors/AppError";

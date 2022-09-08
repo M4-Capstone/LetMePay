@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import "dotenv/config";
 
 import AppDataSource from "../../data-source";
