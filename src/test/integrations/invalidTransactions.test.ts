@@ -39,45 +39,38 @@ describe('/transactions', () => {
 	// deposito sem autenticacao
 	test('POST /transactions -  Must be able to create a deposite transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/deposit')
 			.send(mockedInvalidTransactionDeposit)
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Wallet or user not found')
 	})
 
 	// saque sem autenticacao
 	test('POST /transactions -  Must be able to create a withdraw transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/withdraw')
 			.send(mockedInvalidTransactionWithdraw)
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Wallet or user not found')
 	})
 
 	// transferencia sem autenticacao
 	test('POST /transactions -  Must be able to create a transfer transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/transfer')
 			.send(mockedInvalidTransactionTransfer)
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Wallet or user not found')
 	})
 
 	test('POST /users - should be able to create an User', async () => {
 		userSenderCreated = await request(app).post('/users').send(mockedUser)
-	})
-
-	test('POST /login - should be able to create session', async () => {
-		token = await request(app).post('/login').send(mockedUserLogin)
 	})
 
 	test('POST /users - should be able to create an User', async () => {
@@ -86,50 +79,52 @@ describe('/transactions', () => {
 			.send(mockedUserReceiver)
 	})
 
+	test('POST /login - should be able to create session', async () => {
+		token = await request(app).post('/login').send(mockedUserLogin)
+	})
+
 	// deposito no valor de 0 reais
 	test('POST /transactions -  Must be able to create a deposite transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/deposit')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedInvalidTransactionDeposit)
 
-		expect(response.status).toBe(401)
+		expect(response.status).toBe(400)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Amount not allowed')
 	})
 
 	// saque no valor de 0 reais
 	test('POST /transactions -  Must be able to create a withdraw transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/withdraw')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedInvalidTransactionWithdraw)
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Amount not allowed')
 	})
 
 	// transferencia no valor de 0 reais
 	test('POST /transactions -  Must be able to create a transfer transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/tranfer')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedInvalidTransactionTransfer)
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
 		expect(response.body).toHaveProperty('status')
-		expect(response.body.message).toBe('')
-		expect(response.body.status).toBe('')
+		expect(response.body.message).toBe('Amount not allowed')
 	})
 })
 
+// Deposito
 test('POST /transactions -  Must be able to create a deposite transaction', async () => {
-	const response = await request(app)
-		.post('/transactions/:type') // parametro de rota a decidir
+	await request(app)
+		.post('/transactions/deposit')
 		.set('Authorization', `Bearer ${token}`)
 		.send(mockedTransactionDeposit2)
 })
@@ -137,38 +132,33 @@ test('POST /transactions -  Must be able to create a deposite transaction', asyn
 // saque com um valor maior do que o valor em conta
 test('POST /transactions -  Must be able to create a withdraw transaction', async () => {
 	const response = await request(app)
-		.post('/transactions/:type') // parametro de rota a decidir
+		.post('/transactions/withdraw')
 		.set('Authorization', `Bearer ${token}`)
 		.send(mockedTransactionWithdraw)
 	expect(response.status).toBe(401)
-	expect(response.body).toHaveProperty('message')
-	expect(response.body).toHaveProperty('status')
-	expect(response.body.message).toBe('')
-	expect(response.body.status).toBe('')
+	expect(response.body).toHaveProperty(
+		'User does not have the money to perform the transaction'
+	)
 })
 
 // transferencia com um valor maior do que o valor em conta
 test('POST /transactions -  Must be able to create a transfer transaction', async () => {
 	const response = await request(app)
-		.post('/transactions/:type') // parametro de rota a decidir
+		.post('/transactions/transfer')
 		.send(mockedTransactionTransfer)
 	expect(response.status).toBe(401)
-	expect(response.body).toHaveProperty('message')
-	expect(response.body).toHaveProperty('status')
-	expect(response.body.message).toBe('')
-	expect(response.body.status).toBe('')
+	expect(response.body).toHaveProperty(
+		'User does not have the money to perform the transaction'
+	)
 })
 
 // transferencia para um usuario inexistente
 test('POST /transactions -  Must be able to create a transfer transaction', async () => {
 	const response = await request(app)
-		.post('/transactions/:type') // parametro de rota a decidir
+		.post('/transactions/transfer')
 		.send(mockedInvalidTransferId)
-	expect(response.status).toBe(401)
-	expect(response.body).toHaveProperty('message')
-	expect(response.body).toHaveProperty('status')
-	expect(response.body.message).toBe('')
-	expect(response.body.status).toBe('')
+	expect(response.status).toBe(404)
+	expect(response.body).toHaveProperty('Wallet or user not found')
 })
 
 /*

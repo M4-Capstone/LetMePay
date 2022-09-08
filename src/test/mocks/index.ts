@@ -1,4 +1,8 @@
-import { ITransaction } from '../../interfaces/transactions'
+import {
+	IDepositTransaction,
+	ITransferTransaction,
+	IWithdrawTransaction,
+} from '../../interfaces/transactions'
 
 export const mockedAddress = {
 	zipCode: '123654789',
@@ -32,7 +36,7 @@ export const mockedUserReceiver = {
 	name: 'Marco',
 	email: 'marco@fakemail.com',
 	password: '123456',
-	documentId: '6457985492',
+	documentId: '00011122234',
 	address: mockedAddress2,
 }
 
@@ -41,7 +45,7 @@ export const mockedInvalidTransferId = {
 	name: 'Marco',
 	email: 'marco@fakemail.com',
 	password: '123456',
-	documentId: '6457985492',
+	documentId: '22211100034',
 	address: mockedAddress2,
 }
 
@@ -53,53 +57,48 @@ export const mockedUserLogin = {
 export const transactionType = {
 	withdraw: 'wd',
 	deposit: 'dp',
-	transfer: 'tr',
+	transfer: 'tf',
 }
 
-export const mockedTransactionDeposit: ITransaction = {
+export const mockedTransactionDeposit: IDepositTransaction = {
 	amount: 500,
-	categoryTypeId: transactionType.deposit,
 	receiverWalletId: 'GustavoId',
-	senderWalletId: 'MarcoId',
+	documentId: 'MarcoId',
 }
-export const mockedTransactionDeposit2: ITransaction = {
+export const mockedTransactionDeposit2: IDepositTransaction = {
 	amount: 100,
-	categoryTypeId: transactionType.deposit,
 	receiverWalletId: 'GustavoId',
-	senderWalletId: 'MarcoId',
+	documentId: 'MarcoId',
 }
 
-export const mockedInvalidTransactionDeposit: ITransaction = {
+export const mockedInvalidTransactionDeposit: IDepositTransaction = {
 	amount: 0,
-	categoryTypeId: transactionType.deposit,
 	receiverWalletId: 'GustavoId',
-	senderWalletId: 'MarcoId',
+	documentId: 'MarcoId',
 }
 
-export const mockedTransactionTransfer: ITransaction = {
+export const mockedTransactionTransfer: ITransferTransaction = {
 	amount: 250,
-	categoryTypeId: transactionType.transfer,
-	receiverWalletId: 'GustavoId',
+	receiverDocumentId: 'GustavoId',
+	senderDocumentId: '22211100034',
 	senderWalletId: 'MarcoId',
 }
 
-export const mockedInvalidTransactionTransfer: ITransaction = {
+export const mockedInvalidTransactionTransfer: ITransferTransaction = {
 	amount: 0,
-	categoryTypeId: transactionType.deposit,
-	receiverWalletId: 'GustavoId',
+	receiverDocumentId: 'GustavoId',
+	senderDocumentId: '22211100034',
 	senderWalletId: 'MarcoId',
 }
 
-export const mockedTransactionWithdraw: ITransaction = {
+export const mockedTransactionWithdraw: IWithdrawTransaction = {
 	amount: 250,
-	categoryTypeId: transactionType.withdraw,
 	receiverWalletId: 'GustavoId',
-	senderWalletId: 'MarcoId',
+	documentId: 'MarcoId',
 }
 
-export const mockedInvalidTransactionWithdraw: ITransaction = {
+export const mockedInvalidTransactionWithdraw: IWithdrawTransaction = {
 	amount: 0,
-	categoryTypeId: transactionType.deposit,
 	receiverWalletId: 'GustavoId',
-	senderWalletId: 'MarcoId',
+	documentId: 'MarcoId',
 }
