@@ -2,7 +2,7 @@ import AppDataSource from "../../data-source";
 import Users from "../../entities/users.entity";
 import { AppError } from "../../errors/AppError";
 
-const getUserbyKeywordService = async (keyword: string) => {
+const getUserbyKeywordService = async (keyword: string): Promise<Users[]> => {
   const userRepository = AppDataSource.getRepository(Users);
 
   const user = await userRepository.find({

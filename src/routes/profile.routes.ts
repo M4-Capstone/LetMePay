@@ -8,5 +8,6 @@ import ensureAuthMiddleware from "../middleware/ensureAuth.middleware";
 const routes = Router();
 
 routes.get("", ensureAuthMiddleware, getCurrentUserController);
+routes.get("/:keyword",getUserKeywordController)
 
 export default routes;
