@@ -47,7 +47,7 @@ describe('/transactions', () => {
 
 	test('POST /transactions -  Must be able to create a deposite transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/deposit')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedTransactionDeposit)
 		expect(response.status).toBe(200)
@@ -59,7 +59,7 @@ describe('/transactions', () => {
 
 	test('POST /transactions -  Must be able to create a withdraw transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/withdraw')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedTransactionTransfer)
 		expect(response.status).toBe(200)
@@ -71,7 +71,7 @@ describe('/transactions', () => {
 
 	test('POST /transactions -  Must be able to create a transfer transaction', async () => {
 		const response = await request(app)
-			.post('/transactions/:type') // parametro de rota a decidir
+			.post('/transactions/transfer')
 			.set('Authorization', `Bearer ${token}`)
 			.send(mockedTransactionWithdraw)
 		expect(response.status).toBe(200)
