@@ -6,8 +6,6 @@ import Users from "../entities/users.entity";
 import getCurrentUserService from "../services/users/getCurrentUser.service";
 import getUserbyKeyword from "../services/users/getUserByKeyword.service";
 import { deleteUserService } from "../services/users/deleteUser.service";
-import getCurrentUserService from "../services/users/getCurrentUser.service";
-import { deleteUserService } from "../services/users/deleteUser.service";
 import { updateUserService } from "../services/users/updateUser.service";
 
 
