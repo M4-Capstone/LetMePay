@@ -1,23 +1,12 @@
 import { Request, Response } from 'express'
-import { ITransaction } from '../interfaces/transactions'
+import { createTransactionsService } from '../services/transactions/createTransactions.service'
 
-export const createTransactionsService = async (
+export const createTransactionsController = async (
 	req: Request,
 	res: Response
 ) => {
-	const {
-		amount,
-		categoryTypeId,
-		receiverWalletId,
-		senderWalletId,
-	}: ITransaction = req.body
-
-	// const transaction = await createTransactionsService({
-	// 	amount,
-	// 	categoryTypeId,
-	// 	receiverWalletId,
-	// 	senderWalletId,
-	// })
-
-	return res.status(201).json()
+	const transaction = await createTransactionsService(req.body)
+	return res.json(transaction)
 }
+
+export default createTransactionsController
