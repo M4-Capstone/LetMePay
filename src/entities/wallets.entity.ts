@@ -4,10 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
 } from "typeorm";
-import Users from "./users.entity";
 
 @Entity()
 export default class Wallets {
@@ -22,8 +19,4 @@ export default class Wallets {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToOne(() => Users, (owner) => owner.wallet)
-  @JoinColumn()
-  owner: Users;
 }

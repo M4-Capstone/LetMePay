@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
+import { instanceToPlain } from "class-transformer";
+import { IUserRequest } from "../interfaces/users";
+import createUserService from "../services/users/createUser.service";
 import Users from "../entities/users.entity";
 import getCurrentUserService from "../services/users/getCurrentUser.service";
 import getUserbyKeyword from "../services/users/getUserByKeyword.service";
 import { deleteUserService } from "../services/users/deleteUser.service";
 import getCurrentUserService from "../services/users/getCurrentUser.service";
+import { deleteUserService } from "../services/users/deleteUser.service";
 import { updateUserService } from "../services/users/updateUser.service";
-import {instanceToPlain} from "class-transformer"
 
 
 const getCurrentUserController = async (req: Request, res: Response) => {
@@ -17,6 +20,12 @@ const getCurrentUserController = async (req: Request, res: Response) => {
   return res.json(user);
 };
 
+const createUserController = async (req: Request, res: Response) => {
+  const userData: IUserRequest = req.body;
+  const newUser = await createUserService(userData);
+  return res.status(201).json(instanceToPlain(newUser));
+};
+
 const getUserKeywordController = async (req: Request, res: Response) => {
   const { keyword } = req.params;
 
@@ -24,8 +33,6 @@ const getUserKeywordController = async (req: Request, res: Response) => {
 
   return res.json(user);
 };
-
-
 
 const deleteUserController = async (req:Request, res:Response) =>{
 
@@ -49,5 +56,6 @@ const updateUserController = async (req:Request, res:Response) =>{
 
 } 
 
-export { getCurrentUserController, deleteUserController, updateUserController, getUserKeywordController };
+export { createUserController,getCurrentUserController, deleteUserController, updateUserController, getUserKeywordController };
+
 
