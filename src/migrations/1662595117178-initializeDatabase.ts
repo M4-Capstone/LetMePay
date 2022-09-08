@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class fixSqliteError1662500981562 implements MigrationInterface {
-    name = 'fixSqliteError1662500981562'
+export class NewMigration1662595117178 implements MigrationInterface {
+    name = 'NewMigration1662595117178'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "addresses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "neighbourhood" character varying(60) NOT NULL, "zipCode" character varying(8) NOT NULL, "number" character varying(6), "city" character varying(60) NOT NULL, "state" character varying(2) NOT NULL, CONSTRAINT "PK_745d8f43d3af10ab8247465e450" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "addresses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "neighbourhood" character varying(60) NOT NULL, "zipCode" character varying(8) NOT NULL, "street" character varying(60) NOT NULL, "number" character varying(6), "city" character varying(60) NOT NULL, "state" character varying(2) NOT NULL, CONSTRAINT "PK_745d8f43d3af10ab8247465e450" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "wallets" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "amount" numeric(12,2) NOT NULL DEFAULT '0', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "ownerDocumentId" character varying(14), CONSTRAINT "REL_e7aac2dbe5f51f5dd934d7298d" UNIQUE ("ownerDocumentId"), CONSTRAINT "PK_8402e5df5a30a229380e83e4f7e" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "users" ("documentId" character varying(14) NOT NULL, "name" character varying(100) NOT NULL, "email" character varying(70) NOT NULL, "password" character varying(160) NOT NULL, "isActive" boolean NOT NULL DEFAULT true, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "addressId" uuid, "walletId" uuid, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "REL_bafb08f60d7857f4670c172a6e" UNIQUE ("addressId"), CONSTRAINT "REL_0a95e6aab86ff1b0278c18cf48" UNIQUE ("walletId"), CONSTRAINT "PK_5ba6f596bbf91749a8d898c1128" PRIMARY KEY ("documentId"))`);
         await queryRunner.query(`CREATE TABLE "transaction_categories" ("id" SERIAL NOT NULL, "type" character varying(2) NOT NULL, CONSTRAINT "PK_bbd38b9174546b0ed4fe04689c7" PRIMARY KEY ("id"))`);
