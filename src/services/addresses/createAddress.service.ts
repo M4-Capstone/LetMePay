@@ -12,12 +12,12 @@ const createAddressService = async (
   const addrRepo = AppDataSource.getRepository(Addresses);
   const manager = customManager || addrRepo.manager;
 
-  const foundAddress = await addrRepo.findOneBy([
-    { zipCode },
-    { street, number, neighbourhood },
-  ]);
-  if (foundAddress)
-    throw new AppError("There is already an existing address", 409);
+  // const foundAddress = await addrRepo.findOneBy([
+  //   { zipCode },
+  //   { street, number, neighbourhood },
+  // ]);
+  // if (foundAddress)
+  //   throw new AppError("There is already an existing address", 409);
 
   const address = manager.create(Addresses, {
     zipCode,
