@@ -1,5 +1,6 @@
 import app from "./app";
 import AppDataSource from "./data-source";
+import 'dotenv/config'
 
 async function initDb() {
   await AppDataSource.initialize()
@@ -10,7 +11,7 @@ async function initDb() {
       console.error("[DB] An error ocurred during database initalization", err);
     });
 
-  app.listen(3000, () => {
+  app.listen(process.env.PORT || 3000, () => {
     console.log("server is running");
   });
 }
