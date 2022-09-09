@@ -5,6 +5,7 @@ import Users from '../../entities/users.entity'
 import Wallets from '../../entities/wallets.entity'
 import { AppError } from '../../errors/AppError'
 import { ITransferTransaction } from '../../interfaces/transactions'
+import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
 
 const transactionRepository = AppDataSource.getRepository(Transaction)
 const walletRepository = AppDataSource.getRepository(Wallets)
@@ -80,6 +81,9 @@ export const transferTransactionService = async ({
 		},
 		receiver.wallet
 	)
+
+	// await sendReceiptToClientEmail('transfer',_,_)
+	// import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
 
 	return transfer
 }
