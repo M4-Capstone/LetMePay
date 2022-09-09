@@ -5,26 +5,24 @@ import * as fs from "fs";
 import * as path from "path";
 import "dotenv/config";
 
+const acceptedTypeFormat: string[] = ["deposit", "transfer", "withdraw"];
+
 const sendReceiptToClientEmail = async (
   transactionType: string,
   transaction: any,
   clientEmail: string
 ) => {
   try {
-    if (
-      transactionType != "deposit" &&
-      transactionType != "transfer" &&
-      transactionType != "withdraw"
-    ) {
-      throw new Error("transactionType invalid");
+    if (!acceptedTypeFormat.includes(transactionType)) {
+      throw new Error("transactionType format invalid");
     }
-    const filePathName = path.resolve(__dirname, transactionType + ".ejs");
+    const filepath = path.resolve(__dirname, transactionType + ".ejs");
 
-    const htmlString = fs.readFileSync(filePathName).toString();
+    const ejsModel = fs.readFileSync(filepath).toString();
 
     const options: any = { format: "Letter" };
 
-    const ejsData = ejs.render(htmlString, { transaction });
+    const ejsData = ejs.render(ejsModel, { transaction });
 
     return await pdf.create(ejsData, options).toStream((err, response) => {
       if (err) return console.log(err);
@@ -64,14 +62,14 @@ const sendReceiptToClientEmail = async (
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            return console.log(error.message);
+            return console.log("Error during convert" + error.message);
           }
           console.log("email successfully sent to client: " + clientEmail);
         });
       });
     });
   } catch (err) {
-    console.log("Error processing request: " + err);
+    console.log("Error on convert process: " + err);
   }
 };
 
