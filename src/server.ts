@@ -11,7 +11,7 @@ async function initDb() {
     });
 
   app.listen(3000, () => {
-    console.log("Eh os guri");
+    console.log("server is running");
   });
 }
 

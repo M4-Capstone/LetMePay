@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -22,15 +24,12 @@ export default class Transaction {
   @Column("time")
   hour: string;
 
-  @OneToOne(() => TransactionCategories, { eager: true })
-  @JoinColumn()
+  @ManyToOne(() => TransactionCategories, { eager: true, nullable: false })
   categoryType: TransactionCategories;
 
-  @OneToOne(() => Wallets)
-  @JoinColumn()
+  @ManyToOne(() => Wallets, { nullable: false })
   receiverWallet: Wallets;
 
-  @OneToOne(() => Wallets, { nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Wallets, { nullable: true })
   senderWallet: Wallets;
 }
