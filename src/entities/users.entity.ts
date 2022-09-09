@@ -7,6 +7,7 @@ import {
   JoinColumn,
   PrimaryColumn,
 } from "typeorm";
+import { Exclude } from "class-transformer";
 import Addresses from "./addresses.entity";
 import Wallets from "./wallets.entity";
 
@@ -22,6 +23,7 @@ export default class Users {
   email: string;
 
   @Column({ length: 160 })
+  @Exclude()
   password: string;
 
   @Column({ default: true })

@@ -1,3 +1,3 @@
-export interface ICategoryTransaction {
+export interface ITransactionCategory {
 	type: string
 }

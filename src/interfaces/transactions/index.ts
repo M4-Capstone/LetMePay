@@ -1,6 +1,18 @@
-export interface transactions {
+export interface IDepositTransaction {
 	amount: number
-	categoryTypeId: string
 	receiverWalletId: string
+	documentId: string
+}
+
+export interface IWithdrawTransaction {
+	amount: number
+	receiverWalletId: string
+	documentId: string
+}
+
+export interface ITransferTransaction {
+	amount: number
+	receiverDocumentId: string
 	senderWalletId: string
+	senderDocumentId: string
 }

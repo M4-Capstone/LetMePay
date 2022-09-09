@@ -1,4 +1,4 @@
-import { IUserRequest, IUserLogin } from "../../../interfaces/users";
+import { IUserRequest, IUserLogin } from "../interfaces/users";
 
 export const mockedUser: IUserRequest = {
     name: "Felipe",
@@ -9,7 +9,7 @@ export const mockedUser: IUserRequest = {
         zipCode: "30200-000",
         street: "Rua Olegario",
         number: "30",
-        neighborhood: "Centro",
+        neighbourhood: "Centro",
         city: "São Paulo",
         state: "SP"
     }
