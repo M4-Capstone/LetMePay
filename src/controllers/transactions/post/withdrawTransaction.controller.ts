@@ -13,7 +13,7 @@ export const withdrawTransactionController = async (
 		documentId,
 	})
 	return res.json({
-		message: 'Transaction successfully created',
+		message: 'Withdraw transaction successfully created',
 		status: 'Receipt sent to customers email',
 	})
 }

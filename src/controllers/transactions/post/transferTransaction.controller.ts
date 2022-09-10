@@ -16,7 +16,7 @@ export const transferTransactionController = async (
 		senderDocumentId,
 	})
 	return res.json({
-		message: 'Transaction successfully created',
+		message: ' Transfer transaction successfully created',
 		status: 'Receipt sent to customers email',
 	})
 }

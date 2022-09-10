@@ -14,7 +14,7 @@ export const depositTransactionController = async (
 	})
 
 	return res.json({
-		message: 'Transaction successfully created',
+		message: 'Deposit transaction successfully created',
 		status: 'Receipt sent to customers email',
 	})
 }
