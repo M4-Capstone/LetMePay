@@ -4,10 +4,10 @@ const transferTransaction = {
   date: "12 feb 2022",
   hour: "12:40:00",
   sender: {
-    name: "Marcelino Augusto da Silva",
+    name: "",
   },
   receiver: {
-    name: "Mariana Pereira Gonçalves",
+    name: "",
   },
 };
 
@@ -17,7 +17,7 @@ const depositTransaction = {
   date: "12 feb 2022",
   hour: "12:40:00",
   receiver: {
-    name: "Mariana Pereira Gonçalves",
+    name: "",
   },
 };
 
@@ -27,12 +27,7 @@ const withdrawTransaction = {
   date: "12 feb 2022",
   hour: "12:40:00",
   receiver: {
-    name: "Mariana Pereira Gonçalves",
+    name: "",
   },
 };
 
-//Exemplo como deve ser chamado
-// await sendReceiptToClientEmail("transfer", transferTransaction, "teste@hotmail.com");
-// await sendReceiptToClientEmail("deposit", depositTransaction, "teste@hotmail.com");
-// await sendReceiptToClientEmail("withdraw", withdrawTransaction, "teste@hotmail.com");
-// "no terceiro argumento é o email de quem executou a operação"

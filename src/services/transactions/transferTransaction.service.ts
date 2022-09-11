@@ -23,7 +23,7 @@ export const transferTransactionService = async ({
   });
 
   const senderWallet = await walletRepository.findOneBy({ id: senderWalletId });
-  
+
   const sender = await userRepository.findOneBy({
     documentId: senderDocumentId,
   });
@@ -84,8 +84,23 @@ export const transferTransactionService = async ({
     receiver.wallet
   );
 
-  // await sendReceiptToClientEmail('transfer',_,_)
-  // import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
+  const receiptData = {
+    ...transfer,
+    amount: transfer.amount.toFixed(2),
+    sender: {
+      name: sender.name,
+    },
+    receiver: {
+      name: receiver.name,
+    },
+  };
+
+  await sendReceiptToClientEmail(
+    "transfer",
+    receiptData,
+    sender.email,
+    sender.name
+  );
 
   return transfer;
 };

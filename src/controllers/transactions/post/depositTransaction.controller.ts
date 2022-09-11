@@ -6,7 +6,6 @@ export const depositTransactionController = async (
 	res: Response
 ) => {
 	const { amount, receiverWalletId, documentId } = req.body
-	console.log(req.body,'iassa')
 	await depositTransactionService({
 		amount,
 		receiverWalletId,

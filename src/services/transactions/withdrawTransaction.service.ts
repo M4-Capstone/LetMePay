@@ -53,13 +53,13 @@ export const withdrawTransactionService = async ({
     receiverWallet: receiverWallet,
   };
 
-  let transfer = transactionRepository.create({
+  let withdraw = transactionRepository.create({
     ...transaction,
     date: date,
     hour: hour,
   });
 
-  transfer = await transactionRepository.save(transfer);
+  withdraw = await transactionRepository.save(withdraw);
 
   receiverWallet.amount = +receiverWallet.amount - amount;
 
@@ -70,8 +70,20 @@ export const withdrawTransactionService = async ({
     receiverWallet
   );
 
-  // await sendReceiptToClientEmail('withdraw',_,_)
-  // import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
+  const receiptData = {
+    ...withdraw,
+    amount: withdraw.amount.toFixed(2),
+    receiver: {
+      name: receiver.name,
+    },
+  };
 
-  return transfer;
+  await sendReceiptToClientEmail(
+    "withdraw",
+    receiptData,
+    receiver.email,
+    receiver.name
+  );
+
+  return withdraw;
 };
