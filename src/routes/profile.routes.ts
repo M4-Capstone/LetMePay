@@ -10,4 +10,5 @@ const routes = Router();
 routes.get("", ensureAuthMiddleware, getCurrentUserController);
 routes.get("/:keyword",getUserKeywordController)
 
+
 export default routes;

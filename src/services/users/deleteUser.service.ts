@@ -1,8 +1,9 @@
 import AppDataSource from "../../data-source"
 import Users from "../../entities/users.entity"
 import { AppError } from "../../errors/AppError"
+import { IUserDelete } from "../../interfaces/users"
 
-export const deleteUserService = async (id:string) =>{
+export const deleteUserService = async ({id}:IUserDelete) =>{
 
     const userRepository = AppDataSource.getRepository(Users)
 
