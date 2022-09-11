@@ -3,26 +3,40 @@ import Users from "../../entities/users.entity"
 import { AppError } from "../../errors/AppError"
 import { IUserUpdate } from "../../interfaces/users"
 import * as bcrypt from "bcryptjs"
+import Addresses from "../../entities/addresses.entity"
 
-export const updateUserService = async (id:string, {name, email, password}:IUserUpdate): Promise<Users> => {
+export const updateUserService = async (id:string, {name, email, password, address}:IUserUpdate): Promise<Users> => {
 
     const userRepository = AppDataSource.getRepository(Users)
+    const addressRepository = AppDataSource.getRepository(Addresses)
 
     const findUser = await userRepository.findOneBy({documentId: id})
 
+    
     if(!findUser){
         throw new AppError("User not found", 404)
     }
+    console.log(findUser.isActive)
     
-    if(!bcrypt.compare(findUser.password, password!)){
-        throw new AppError("Please enter a different password")
+    if(!findUser.isActive){
+        throw new AppError("User not active", 400)
     }
 
-    const hashedPassword = await bcrypt.hash(password!, 10)
+    if(password){
+        if(!bcrypt.compare(findUser.password, password)){
+            throw new AppError("Please enter a different password")
+        }
+    
+        findUser.password = await bcrypt.hash(password, 10)
+    }
+
+    if(address){
+        await addressRepository.update({id: findUser.address.id}, address)
+    }
 
     await userRepository.update({documentId: id}, {
         name: name ? name : findUser.name,
-        password: password ? hashedPassword : findUser.password,
+        password: findUser.password,
         email: email ? email : findUser.email
     })
 

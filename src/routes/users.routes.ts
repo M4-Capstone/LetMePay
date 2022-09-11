@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
   createUserController,
+  deleteUserController,
   getCurrentUserController,
+  updateUserController,
 } from "../controllers/users.controllers";
 import ensureAuthMiddleware from "../middleware/ensureAuth.middleware";
 import { validateSchemaMiddleware } from "../middleware/validateSchema.middleware";
-import { newUserSchema } from "../schemas/createUser.schema";
+import { newUserSchema, updateUserSchema } from "../schemas/user.schema";
 
 const usersRoutes = Router();
 
@@ -16,5 +18,8 @@ usersRoutes.post(
   validateSchemaMiddleware(newUserSchema),
   createUserController
 );
+
+usersRoutes.patch("", ensureAuthMiddleware, validateSchemaMiddleware(updateUserSchema), updateUserController);
+usersRoutes.delete("", ensureAuthMiddleware, deleteUserController);
 
 export default usersRoutes;

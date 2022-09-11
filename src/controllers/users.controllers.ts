@@ -34,9 +34,9 @@ const getUserKeywordController = async (req: Request, res: Response) => {
 
 const deleteUserController = async (req:Request, res:Response) =>{
 
-  const id = req.user.id
+  const { id } = req.user
 
-  const deleteUser = await deleteUserService(id)
+  const deleteUser = await deleteUserService({id})
 
   return res.status(204).send()
 
@@ -46,9 +46,9 @@ const updateUserController = async (req:Request, res:Response) =>{
 
   const id = req.user.id
 
-  const { name, email, password } = req.body
+  const { name, email, password, address } = req.body
 
-  const updateUser = await updateUserService(id, {name, email, password})
+  const updateUser = await updateUserService(id, {name, email, password, address})
 
   return res.json(instanceToPlain(updateUser))
 
