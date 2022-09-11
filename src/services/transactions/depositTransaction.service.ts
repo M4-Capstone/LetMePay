@@ -17,15 +17,17 @@ export const depositTransactionService = async ({
   receiverWalletId,
   documentId,
 }: IDepositTransaction) => {
-  const receiver = await walletRepository.findOneBy({ id: receiverWalletId });
-  const user = await userRepository.findOneBy({ documentId });
+  const receiverWallet = await walletRepository.findOneBy({
+    id: receiverWalletId,
+  });
+  const receiver = await userRepository.findOneBy({ documentId });
   const transactionType = await categoryRepository.findOneBy({ type: "dp" });
 
-  if (!user || !receiver || !transactionType) {
+  if (!receiver || !receiverWallet || !transactionType) {
     throw new AppError("Wallet or user not found", 404);
   }
 
-  if (user.wallet.id !== receiver.id) {
+  if (receiver.wallet.id !== receiverWallet.id) {
     throw new AppError("The wallet does not belong to this user", 403);
   }
 
@@ -39,7 +41,7 @@ export const depositTransactionService = async ({
   const transaction = {
     amount,
     categoryType: transactionType,
-    receiverWallet: receiver,
+    receiverWallet: receiverWallet,
   };
 
   let deposit = transactionRepository.create({
@@ -49,16 +51,28 @@ export const depositTransactionService = async ({
   });
 
   deposit = await transactionRepository.save(deposit);
-    receiver.amount =+receiver.amount + amount;
-    await walletRepository.update(
-      {
-        id: receiver.id,
-      },
-      receiver
-    );
 
-//   await sendReceiptToClientEmail('deposit',_,_)
-//   import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
+  receiverWallet.amount = +receiverWallet.amount + amount;
+  
+  await walletRepository.update(
+    {
+      id: receiverWallet.id,
+    },
+    receiverWallet
+  );
+  const receiptData = {
+    ...deposit,
+    amount: deposit.amount.toFixed(2),
+    receiver: {
+      name: receiver.name,
+    },
+  };
 
-    return deposit;
+  await sendReceiptToClientEmail(
+    "deposit",
+    receiptData,
+    receiver.email,
+    receiver.name
+  );
+  return deposit;
 };

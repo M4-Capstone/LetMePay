@@ -82,6 +82,7 @@
   <body>
     <div class="middle">
       <h1>Comprovante de Saque</h1>
+      <br>
       <div class="datetime">
         <span><%= transaction.date %>, </span>
         <span><%= transaction.hour %></span>
@@ -90,6 +91,7 @@
     <div class="left">
       <p class="titulo">Valor retirado</p>
       <p class="valor">R$ <%= transaction.amount %></p>
+      <br>
       <p class="titulo">Beneficiado</p>
       <p class="valor"><%= transaction.receiver.name %></p>
     </div>
@@ -97,7 +99,9 @@
     <div class="footer">
       <p class="titulo">Código de autenticação</p>
       <p class="valor"><%= transaction.id %></p>
+      <br>
       <h5 class="titulo org-name">LetMePay S.A.</h5>
+      <br>
       <h6 class="aviso">
         Esse documento faz parte de um trabalho acadêmico e suas procedências
         são de natureza fictícia.

@@ -16,3 +16,5 @@ export interface ITransferTransaction {
 	senderWalletId: string
 	senderDocumentId: string
 }
+
+
