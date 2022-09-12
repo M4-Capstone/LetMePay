@@ -17,16 +17,6 @@ const getCurrentUserService = async (id: string): Promise<Users> => {
     throw new AppError("User inactive", 404);
   }
 
-  // const removePassword = (user: Users) => {
-  //   const treatedUser = [user];
-  //   return treatedUser.map((user) => {
-  //     const { password, ...userWithoutPwd } = user;
-  //     return userWithoutPwd;
-  //   });
-  // };
-
-  const { password, ...user } = findUser;
-
   return findUser;
 };
 
