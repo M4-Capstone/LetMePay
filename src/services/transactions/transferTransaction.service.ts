@@ -12,24 +12,23 @@ const walletRepository = AppDataSource.getRepository(Wallets);
 const userRepository = AppDataSource.getRepository(Users);
 const categoryRepository = AppDataSource.getRepository(TransactionCategories);
 
-export const transferTransactionService = async ({
-  amount,
-  receiverDocumentId,
-  senderWalletId,
-  senderDocumentId,
-}: ITransferTransaction) => {
+export const transferTransactionService = async (
+  { amount, receiverDocumentId, senderDocumentId }: ITransferTransaction,
+  senderId: string
+) => {
+  const sender = await userRepository.findOneBy({
+    documentId: senderId,
+  });
   const receiver = await userRepository.findOneBy({
     documentId: receiverDocumentId,
   });
 
-  const senderWallet = await walletRepository.findOneBy({ id: senderWalletId });
-
-  const sender = await userRepository.findOneBy({
-    documentId: senderDocumentId,
+  const senderWallet = await walletRepository.findOneBy({
+    id: sender?.wallet.id,
   });
 
   const transactionType = await categoryRepository.findOneBy({ type: "tf" });
-  
+
   if (amount < 1) {
     throw new AppError("Amount not allowed", 400);
   }
@@ -37,7 +36,7 @@ export const transferTransactionService = async ({
     throw new AppError("Wallet or user not found", 404);
   }
 
-  if (senderWallet.id !== sender.wallet.id) {
+  if (senderDocumentId !== sender.documentId) {
     throw new AppError("The wallet does not belong to this user", 403);
   }
 

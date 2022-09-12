@@ -11,7 +11,7 @@ const sendReceiptToClientEmail = async (
   transactionType: string,
   transaction: any,
   clientEmail: string,
-  author:string
+  author: string
 ) => {
   try {
     if (!acceptedTypeFormat.includes(transactionType)) {
@@ -43,7 +43,7 @@ const sendReceiptToClientEmail = async (
         const mailOptions: any = {
           from: process.env.SMTP_USER,
           to: clientEmail,
-          subject: "Aqui está seu comprovante",
+          subject: `Let Me Pay - Aqui está seu comprovante do dia ${new Date()}`,
           html: `<h1>${author}, seu comprovante chegou! </h1>
                 <p>Você está recebendo o comprovante da operação realizada pelo 
                 internet banking no anexo deste email.</p>
@@ -63,7 +63,9 @@ const sendReceiptToClientEmail = async (
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            return console.log("Error during send email process" + error.message);
+            // return console.log(
+            //   "Error during send email process" + error.message
+            // );
           }
           console.log("email successfully sent to client: " + clientEmail);
         });

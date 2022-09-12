@@ -1,19 +1,17 @@
-import { Request, Response } from 'express'
-import { depositTransactionService } from '../../../services/transactions/depositTransaction.service'
+import { Request, Response } from "express";
+import { depositTransactionService } from "../../../services/transactions/depositTransaction.service";
 
 export const depositTransactionController = async (
-	req: Request,
-	res: Response
+  req: Request,
+  res: Response
 ) => {
-	const { amount, receiverWalletId, documentId } = req.body
-	await depositTransactionService({
-		amount,
-		receiverWalletId,
-		documentId,
-	})
+  const { amount, documentId } = req.body;
+  const receiverId = req.user.id;
 
-	return res.json({
-		message: 'Deposit transaction successfully created',
-		status: 'Receipt sent to customers email',
-	})
-}
+  await depositTransactionService({ amount, documentId }, receiverId);
+
+  return res.json({
+    message: "Deposit transaction successfully created",
+    status: "Receipt sent to customers email",
+  });
+};

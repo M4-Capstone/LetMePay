@@ -29,7 +29,7 @@ const getUserKeywordController = async (req: Request, res: Response) => {
 
   const user: Users[] = await getUserbyKeyword(keyword);
 
-  return res.json(user);
+  return res.json(instanceToPlain(user));
 };
 
 const deleteUserController = async (req:Request, res:Response) =>{
