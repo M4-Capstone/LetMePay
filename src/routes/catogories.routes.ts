@@ -1,24 +1,26 @@
 import { Router } from "express";
-import {
-  getCurrentUserController,
-  getUserKeywordController,
-} from "../controllers/users.controllers";
+
 import ensureAuthMiddleware from "../middleware/ensureAuth.middleware";
+import {
+  getAllCategoriesController,
+  createCategoryController,
+} from "../controllers/categories.controller";
+
 import { userIsActiveMiddleware } from "../middleware/isActive.middleware";
 
-const routes = Router();
+const categoriesRoutes = Router();
 
-routes.get(
+categoriesRoutes.post(
   "",
   ensureAuthMiddleware,
   userIsActiveMiddleware,
-  getCurrentUserController
+  createCategoryController
 );
-routes.get(
-  "/:keyword",
+categoriesRoutes.get(
+  "",
   ensureAuthMiddleware,
   userIsActiveMiddleware,
-  getUserKeywordController
+  getAllCategoriesController
 );
 
-export default routes;
+export default categoriesRoutes;

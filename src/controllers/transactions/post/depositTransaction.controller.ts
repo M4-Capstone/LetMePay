@@ -6,7 +6,6 @@ export const depositTransactionController = async (
 	res: Response
 ) => {
 	const { amount, receiverWalletId, documentId } = req.body
-
 	await depositTransactionService({
 		amount,
 		receiverWalletId,
@@ -14,7 +13,7 @@ export const depositTransactionController = async (
 	})
 
 	return res.json({
-		message: 'Transaction successfully created',
+		message: 'Deposit transaction successfully created',
 		status: 'Receipt sent to customers email',
 	})
 }
