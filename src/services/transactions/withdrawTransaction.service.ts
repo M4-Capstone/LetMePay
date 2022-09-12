@@ -34,7 +34,7 @@ export const withdrawTransactionService = async ({
   }
 
   if (amount < 1) {
-    throw new AppError("Amount not allowed", 403);
+    throw new AppError("Amount not allowed", 400);
   }
 
   if (receiverWallet.amount < amount) {

@@ -4,6 +4,7 @@ import { transferTransactionController } from "../controllers/transactions/post/
 import { withdrawTransactionController } from "../controllers/transactions/post/withdrawTransaction.controller";
 import ensureAuthMiddleware from "../middleware/ensureAuth.middleware";
 import { validateSchemaMiddleware } from "../middleware/validateSchema.middleware";
+import { userIsActiveMiddleware } from "../middleware/isActive.middleware";
 
 import {
   depositSchema,
@@ -17,18 +18,21 @@ transactionRoutes.post(
   "/transfer",
   ensureAuthMiddleware,
   validateSchemaMiddleware(transferSchema),
+  userIsActiveMiddleware,
   transferTransactionController
 );
 transactionRoutes.post(
   "/deposit",
   ensureAuthMiddleware,
   validateSchemaMiddleware(depositSchema),
+  userIsActiveMiddleware,
   depositTransactionController
 );
 transactionRoutes.post(
   "/withdraw",
   ensureAuthMiddleware,
   validateSchemaMiddleware(withdrawSchema),
+  userIsActiveMiddleware,
   withdrawTransactionController
 );
 
