@@ -16,7 +16,6 @@ export const updateUserService = async (id:string, {name, email, password, addre
     if(!findUser){
         throw new AppError("User not found", 404)
     }
-    console.log(findUser.isActive)
     
     if(!findUser.isActive){
         throw new AppError("User not active", 400)

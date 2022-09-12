@@ -19,6 +19,7 @@ const createSessionService = async ({ email, password }: IUserLogin) => {
   const token = jwt.sign(
     {
       email,
+      isActive: user.isActive,
     },
     process.env.SECRET_KEY!,
     {

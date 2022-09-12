@@ -53,7 +53,7 @@ export const depositTransactionService = async ({
   deposit = await transactionRepository.save(deposit);
 
   receiverWallet.amount = +receiverWallet.amount + amount;
-  
+
   await walletRepository.update(
     {
       id: receiverWallet.id,

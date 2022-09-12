@@ -29,17 +29,16 @@ export const transferTransactionService = async ({
   });
 
   const transactionType = await categoryRepository.findOneBy({ type: "tf" });
-
+  
+  if (amount < 1) {
+    throw new AppError("Amount not allowed", 400);
+  }
   if (!senderWallet || !sender || !receiver || !transactionType) {
     throw new AppError("Wallet or user not found", 404);
   }
 
   if (senderWallet.id !== sender.wallet.id) {
     throw new AppError("The wallet does not belong to this user", 403);
-  }
-
-  if (amount < 1) {
-    throw new AppError("Amount not allowed", 403);
   }
 
   if (senderWallet.amount < amount) {
