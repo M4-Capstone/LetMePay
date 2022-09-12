@@ -15,6 +15,10 @@ export const mockedUser: IUserRequest = {
     }
 
 }
+export const mockedUserIncorrectLogin: IUserLogin = {
+    email: "felipe1@mail.com",
+    password: "123456"
+}
 
 export const mockedUserLogin: IUserLogin = {
     email: "felipe@mail.com",
