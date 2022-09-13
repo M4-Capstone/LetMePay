@@ -50,7 +50,8 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail, aut
         const ejsData = ejs.render(ejsModel, { transaction });
         return yield pdf.create(ejsData, options).toStream((err, response) => {
             if (err)
-                return console.log(err);
+               { console.log('olaaaaaaaaa',err)
+                return console.log(err);}
             return new Promise((res, rej) => {
                 const transporter = nodemailer.createTransport({
                     host: "smtp-mail.outlook.com",
