@@ -32,7 +32,7 @@ describe("/transactions", () => {
         connection = res;
       })
       .catch((err) => {
-        console.error("Error during Data Source initialization", err);
+        console.log("Error during Data Source initialization", err);
       });
   });
 
@@ -72,7 +72,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Must be able to create a deposit transaction", async () => {
-    mockedTransactionDeposit.receiverWalletId = userCreated.wallet.id;
     const response = await request(app)
       .post("/transactions/deposit")
       .set("Authorization", `Bearer ${token}`)
@@ -87,7 +86,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Must be able to create a withdraw transaction", async () => {
-    mockedTransactionWithdraw.receiverWalletId = userCreated.wallet.id;
     const response = await request(app)
       .post("/transactions/withdraw")
       .set("Authorization", `Bearer ${token}`)
@@ -102,7 +100,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Must be able to create a transfer transaction", async () => {
-    mockedTransactionTransfer.senderWalletId = userCreated.wallet.id;
     const response = await request(app)
       .post("/transactions/transfer")
       .set("Authorization", `Bearer ${token}`)
@@ -141,7 +138,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Trying to create a invalid deposit transaction by invalid amount", async () => {
-    mockedInvalidTransactionDeposit.receiverWalletId = userCreated.wallet.id;
     const response = await request(app)
       .post("/transactions/deposit")
       .set("Authorization", `Bearer ${token}`)
@@ -153,7 +149,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Trying to create a invalid withdraw transaction by invalid amount", async () => {
-    mockedInvalidTransactionWithdraw.receiverWalletId = userCreated.wallet.id;
     const response = await request(app)
       .post("/transactions/withdraw")
       .set("Authorization", `Bearer ${token}`)
@@ -164,7 +159,6 @@ describe("/transactions", () => {
   });
 
   test("POST /transactions -  Trying to create a invalid transfer transaction by invalid amount", async () => {
-    mockedTransactionTransfer.senderWalletId = userCreated.wallet.id;
     mockedTransactionTransfer.amount = 0;
     const response = await request(app)
       .post("/transactions/transfer")
@@ -174,26 +168,26 @@ describe("/transactions", () => {
     expect(response.status).toBe(400);
   });
 
-  test("POST /transactions -  Trying to create a invalid deposit transaction by receiver not found", async () => {
+  test("POST /transactions -  Trying to create a invalid deposit transaction by different documentID", async () => {
     const response = await request(app)
       .post("/transactions/deposit")
       .set("Authorization", `Bearer ${token}`)
       .send(mockedInvalidTransactionDepositByReceiver);
 
     expect(response.body).toHaveProperty("message");
-    expect(response.body.message).toBe("Wallet or user not found");
-    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("The wallet does not belong to this user");
+    expect(response.status).toBe(403);
   });
 
-  test("POST /transactions -  Trying to create a invalid withdraw transaction by receiver not found", async () => {
+  test("POST /transactions -  Trying to create a invalid withdraw transaction by different documentID", async () => {
     const response = await request(app)
       .post("/transactions/deposit")
       .set("Authorization", `Bearer ${token}`)
       .send(mockedInvalidTransactionWithdrawByReceiver);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
-    expect(response.body.message).toBe("Wallet or user not found");
+    expect(response.body.message).toBe("The wallet does not belong to this user");
   });
 
   test("POST /transactions -  Create a deposite transaction for next tests", async () => {
@@ -221,7 +215,7 @@ describe("/transactions", () => {
     expect(response.status).toBe(400);
   });
 
-  test("POST /transactions -  Trying to create a transfer transaction by receiver not found", async () => {
+  test("POST /transactions -  Trying to create a transfer transaction by by different documentID", async () => {
     const response = await request(app)
       .post("/transactions/transfer")
       .set("Authorization", `Bearer ${token}`)
@@ -236,6 +230,6 @@ describe("/transactions", () => {
       .set("Authorization", `Bearer ${token}`)
       .send(mockedInvalidTransactionTransferBySender);
     expect(response.body).toHaveProperty("message");
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(403);
   });
 });

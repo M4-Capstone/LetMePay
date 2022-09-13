@@ -12,15 +12,14 @@ const walletRepository = AppDataSource.getRepository(Wallets);
 const userRepository = AppDataSource.getRepository(Users);
 const categoryRepository = AppDataSource.getRepository(TransactionCategories);
 
-export const withdrawTransactionService = async ({
-  amount,
-  receiverWalletId,
-  documentId,
-}: IWithdrawTransaction) => {
-  const receiver = await userRepository.findOneBy({ documentId });
+export const withdrawTransactionService = async (
+  { amount, documentId }: IWithdrawTransaction,
+  receiverId: string
+) => {
+  const receiver = await userRepository.findOneBy({ documentId: receiverId });
 
   const receiverWallet = await walletRepository.findOneBy({
-    id: receiverWalletId,
+    id: receiver?.wallet.id,
   });
 
   const transactionType = await categoryRepository.findOneBy({ type: "wd" });
@@ -29,7 +28,7 @@ export const withdrawTransactionService = async ({
     throw new AppError("Wallet or user not found", 404);
   }
 
-  if (receiver.wallet.id !== receiverWallet.id) {
+  if (documentId !== receiver.documentId) {
     throw new AppError("The wallet does not belong to this user", 403);
   }
 
