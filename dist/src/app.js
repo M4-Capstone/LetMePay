@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+require("reflect-metadata");
+require("express-async-errors");
+const transactions_routes_1 = __importDefault(require("./routes/transactions.routes"));
+const express_1 = __importDefault(require("express"));
+const profile_routes_1 = __importDefault(require("./routes/profile.routes"));
+const users_routes_1 = __importDefault(require("./routes/users.routes"));
+const handleError_middleware_1 = require("./middleware/handleError.middleware");
+const session_routes_1 = __importDefault(require("./routes/session.routes"));
+const catogories_routes_1 = __importDefault(require("./routes/catogories.routes"));
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use('/users', users_routes_1.default);
+app.use('/login', session_routes_1.default);
+app.use('/profile', profile_routes_1.default);
+app.use('/transactions', transactions_routes_1.default);
+app.use('/categories', catogories_routes_1.default);
+app.use(handleError_middleware_1.handleErrorMiddleware);
+exports.default = app;

@@ -8,8 +8,11 @@
 	"scripts": {
 		"dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
 		"typeorm": "typeorm-ts-node-commonjs",
-		"test": "cross-env NODE_ENV=test jest --verbose false",
-		"build": "tsc"
+
+		"test": "cross-env NODE_ENV=test jest",
+		"build": "tsc",
+		"start": "node dist/src/server.js"
+
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",

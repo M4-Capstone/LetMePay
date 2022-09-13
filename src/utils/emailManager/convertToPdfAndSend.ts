@@ -63,6 +63,7 @@ const sendReceiptToClientEmail = async (
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
+
             // return console.log(
             //   "Error during send email process" + error.message
             // );

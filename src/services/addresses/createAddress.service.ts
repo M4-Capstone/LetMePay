@@ -18,8 +18,9 @@ const createAddressService = async (
   // ]);
   // if (foundAddress)
   //   throw new AppError("There is already an existing address", 409);
-  //
+
   // seria interessante permitir enderecos iguais, pois podem ser da mesma familia ou etc.
+
   const address = manager.create(Addresses, {
     zipCode,
     street,
