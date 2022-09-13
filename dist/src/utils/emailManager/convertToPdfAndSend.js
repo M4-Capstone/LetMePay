@@ -84,9 +84,9 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail, aut
                 };
                 transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
-                        // return console.log(
-                        //   "Error during send email process" + error.message
-                        // );
+                        return console.log(
+                          "Error during send email process" + error.message
+                        );
                     }
                     console.log("email successfully sent to client: " + clientEmail);
                 });
