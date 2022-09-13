@@ -4,10 +4,21 @@ import {
   getUserKeywordController,
 } from "../controllers/users.controllers";
 import ensureAuthMiddleware from "../middleware/ensureAuth.middleware";
+import { userIsActiveMiddleware } from "../middleware/isActive.middleware";
 
 const routes = Router();
 
-routes.get("", ensureAuthMiddleware, getCurrentUserController);
-routes.get("/:keyword",getUserKeywordController)
+routes.get(
+  "",
+  ensureAuthMiddleware,
+  userIsActiveMiddleware,
+  getCurrentUserController
+);
+routes.get(
+  "/:keyword",
+  ensureAuthMiddleware,
+  userIsActiveMiddleware,
+  getUserKeywordController
+);
 
 export default routes;

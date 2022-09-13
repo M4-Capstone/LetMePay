@@ -5,15 +5,14 @@ export const withdrawTransactionController = async (
 	req: Request,
 	res: Response
 ) => {
-	const { amount, receiverWalletId, documentId } = req.body
-
+	const { amount, documentId } = req.body
+	const receiverId = req.user.id
 	await withdrawTransactionService({
 		amount,
-		receiverWalletId,
-		documentId,
-	})
+		documentId
+	},receiverId)
 	return res.json({
-		message: 'Transaction successfully created',
+		message: 'Withdraw transaction successfully created',
 		status: 'Receipt sent to customers email',
 	})
 }

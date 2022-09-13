@@ -17,4 +17,10 @@ export interface IUserUpdate{
 	name?: string
 	email?: string
 	password?: string
+	documentId?: string
+	address?: {}
+}
+
+export interface IUserDelete{
+	id: string
 }

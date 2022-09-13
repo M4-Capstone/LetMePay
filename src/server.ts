@@ -8,7 +8,7 @@ async function initDb() {
       console.log("[DB] Database started successfully");
     })
     .catch((err) => {
-      console.error("[DB] An error ocurred during database initalization", err);
+      console.log("[DB] An error ocurred during database initalization", err);
     });
 
   app.listen(process.env.PORT || 3000, () => {

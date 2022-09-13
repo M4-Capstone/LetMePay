@@ -12,20 +12,21 @@ const walletRepository = AppDataSource.getRepository(Wallets);
 const userRepository = AppDataSource.getRepository(Users);
 const categoryRepository = AppDataSource.getRepository(TransactionCategories);
 
-export const depositTransactionService = async ({
-  amount,
-  receiverWalletId,
-  documentId,
-}: IDepositTransaction) => {
-  const receiver = await walletRepository.findOneBy({ id: receiverWalletId });
-  const user = await userRepository.findOneBy({ documentId });
+export const depositTransactionService = async (
+  { amount, documentId }: IDepositTransaction,
+  receiverId: string
+) => {
+  const receiver = await userRepository.findOneBy({ documentId: receiverId });
   const transactionType = await categoryRepository.findOneBy({ type: "dp" });
+  const receiverWallet = await walletRepository.findOneBy({
+    id: receiver?.wallet.id,
+  });
 
-  if (!user || !receiver || !transactionType) {
+  if (!receiver || !receiverWallet || !transactionType) {
     throw new AppError("Wallet or user not found", 404);
   }
 
-  if (user.wallet.id !== receiver.id) {
+  if (receiver.documentId !== documentId) {
     throw new AppError("The wallet does not belong to this user", 403);
   }
 
@@ -39,7 +40,7 @@ export const depositTransactionService = async ({
   const transaction = {
     amount,
     categoryType: transactionType,
-    receiverWallet: receiver,
+    receiverWallet: receiverWallet,
   };
 
   let deposit = transactionRepository.create({
@@ -49,16 +50,28 @@ export const depositTransactionService = async ({
   });
 
   deposit = await transactionRepository.save(deposit);
-    receiver.amount =+receiver.amount + amount;
-    await walletRepository.update(
-      {
-        id: receiver.id,
-      },
-      receiver
-    );
 
-//   await sendReceiptToClientEmail('deposit',_,_)
-//   import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
+  receiverWallet.amount = +receiverWallet.amount + amount;
 
-    return deposit;
+  await walletRepository.update(
+    {
+      id: receiverWallet.id,
+    },
+    receiverWallet
+  );
+  const receiptData = {
+    ...deposit,
+    amount: deposit.amount.toFixed(2),
+    receiver: {
+      name: receiver.name,
+    },
+  };
+
+  await sendReceiptToClientEmail(
+    "deposit",
+    receiptData,
+    receiver.email,
+    receiver.name
+  );
+  return deposit;
 };
