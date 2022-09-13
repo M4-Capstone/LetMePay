@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "verdana", Courier, monospace;
+    }
+    html {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body {
+      width: 320px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      gap: 30px;
+      border: 0.5px solid gray;
+      justify-content: space-between;
+    }
+    .middle {
+      height: 20%;
+      display: flex;
+      flex-direction: column;
+      padding: 5%;
+      justify-content: center;
+      text-align: center;
+      gap: 10px;
+    }
+    .left {
+      padding: 60px 0;
+      min-height: 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .footer {
+      min-height: 100px;
+      text-align: center;
+      border-top: 1.1px solid gray;
+      padding-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h6 {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 40px;
+      text-align: center;
+    }
+
+    .titulo {
+      color: gray;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .valor {
+      font-size: 19px;
+    }
+    .valor-valor {
+      font-weight: bold;
+    }
+    .org-name {
+      font-size: 24px;
+      color: black;
+    }
+    h1{
+      font-size: 27px;
+    }
+  </style>
+  <body>
+    <div class="middle">
+      <h1>Comprovante de Transferência</h1>
+      <br>
+      <div class="datetime">
+        <span><%= transaction.date %>, </span>
+        <span><%= transaction.hour %></span>
+      </div>
+    </div>
+    <div class="left">
+      <p class="titulo">Valor transferido</p>
+      <p class="valor">R$ <%= transaction.amount %></p>
+      <br>
+      <p class="titulo">Origem</p>
+      <p class="valor"><%= transaction.sender.name %></p>
+      <br>
+      <p class="titulo">Destino</p>
+      <p class="valor"><%= transaction.receiver.name %></p>
+    </div>
+    <div class="footer">
+      <p class="titulo">Código de autenticação</p>
+      <p class="valor"><%= transaction.id %></p>
+      <br>
+      <h5 class="titulo org-name">LetMePay S.A.</h5>
+      <br>
+      <h6 class="aviso">
+        Esse documento faz parte de um trabalho acadêmico e suas procedências
+        são de natureza fictícia.
+      </h6>
+    </div>
+  </body>
+</html>
