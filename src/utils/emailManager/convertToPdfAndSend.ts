@@ -1,5 +1,5 @@
 import * as nodemailer from "nodemailer";
-import * as pdf from "html-pdf";
+const pdf = require("pdf-creator-node");
 import * as ejs from "ejs";
 import * as fs from "fs";
 import * as path from "path";
@@ -21,13 +21,24 @@ const sendReceiptToClientEmail = async (
 
     const ejsModel = fs.readFileSync(filepath).toString();
 
-    const options: any = { format: "A4" };
-
     const ejsData = ejs.render(ejsModel, { transaction });
 
-    return await pdf.create(ejsData, options).toStream((err, response) => {
-      if (err) return console.log(err);
+    const options = {
+      format: "A3",
+      orientation: "portrait",
+      border: "10mm",
+    };
 
+    const document = {
+      html: ejsData,
+      data: {
+        transaction,
+      },
+      path: "./output.pdf",
+      type: "stream",
+    };
+
+    return await pdf.create(document, options).then((response: any) => {
       return new Promise((res, rej) => {
         const transporter = nodemailer.createTransport({
           host: "smtp-mail.outlook.com",
@@ -63,12 +74,13 @@ const sendReceiptToClientEmail = async (
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-
             // return console.log(
             //   "Error during send email process" + error.message
             // );
+            return rej("error");
           }
           console.log("email successfully sent to client: " + clientEmail);
+          res("success");
         });
       });
     });

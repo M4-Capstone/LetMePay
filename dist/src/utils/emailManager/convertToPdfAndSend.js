@@ -33,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer = __importStar(require("nodemailer"));
-const pdf = __importStar(require("html-pdf"));
+const pdf = require("pdf-creator-node");
 const ejs = __importStar(require("ejs"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
@@ -46,11 +46,21 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail, aut
         }
         const filepath = path.resolve(__dirname, transactionType + ".ejs");
         const ejsModel = fs.readFileSync(filepath).toString();
-        const options = { format: "A4" };
         const ejsData = ejs.render(ejsModel, { transaction });
-        return yield pdf.create(ejsData, options).toStream((err, response) => {
-            if (err)
-                return console.log(err);
+        const options = {
+            format: "A3",
+            orientation: "portrait",
+            border: "10mm",
+        };
+        const document = {
+            html: ejsData,
+            data: {
+                transaction,
+            },
+            path: "./output.pdf",
+            type: "stream",
+        };
+        return yield pdf.create(document, options).then((response) => {
             return new Promise((res, rej) => {
                 const transporter = nodemailer.createTransport({
                     host: "smtp-mail.outlook.com",
@@ -87,8 +97,10 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail, aut
                         // return console.log(
                         //   "Error during send email process" + error.message
                         // );
+                        return rej("error");
                     }
                     console.log("email successfully sent to client: " + clientEmail);
+                    res("success");
                 });
             });
         });
