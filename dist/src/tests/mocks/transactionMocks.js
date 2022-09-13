@@ -1,103 +1,88 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mockedInvalidTransactionTransferByReceiver = exports.mockedInvalidTransactionTransferBySender = exports.mockedInvalidTransactionTransferByAmount = exports.mockedTransactionTransfer = exports.mockedInvalidTransactionWithdrawByReceiver = exports.mockedInvalidTransactionWithdraw = exports.mockedTransactionWithdraw = exports.mockedInvalidTransactionDepositByReceiver = exports.mockedInvalidTransactionDeposit = exports.mockedTransactionDeposit2 = exports.mockedTransactionDeposit = exports.transactionType = exports.mockedUserLogin = exports.mockedUserReceiver = exports.mockedUser = exports.mockedAddress2 = exports.mockedAddress = void 0;
-exports.mockedAddress = {
-    zipCode: '123654789',
-    street: 'Rua dos Pigmeus',
-    number: '101',
-    neighborhood: 'Alvorada',
-    city: 'Piracicaba',
-    state: 'Sao Paulo',
-};
-exports.mockedAddress2 = {
-    zipCode: '123654777',
-    street: 'Rua do Veio',
-    number: '88',
-    neighborhood: 'Alemao',
-    city: 'Santo Andre',
-    state: 'Sao Paulo',
-};
+exports.mockedInvalidTransactionTransferByReceiver = exports.mockedInvalidTransactionTransferBySender = exports.mockedInvalidTransactionTransferByAmount = exports.mockedTransactionTransfer = exports.mockedInvalidTransactionWithdrawByReceiver = exports.mockedInvalidTransactionWithdraw = exports.mockedTransactionWithdraw = exports.mockedInvalidTransactionDepositByReceiver = exports.mockedInvalidTransactionDeposit = exports.mockedTransactionDeposit2 = exports.mockedTransactionDeposit = exports.transactionType = exports.mockedUserLogin = exports.mockedUserReceiverOnTransfer = exports.mockedUser = void 0;
 exports.mockedUser = {
-    id: 'qualquerId',
-    name: 'Gustavo',
-    email: 'gustavo@fakemail.com',
-    password: '123456',
-    documentId: '11122233344',
-    address: exports.mockedAddress,
+    name: "gumervaldo abilio",
+    email: "marcoLetMePay@outlook.com",
+    password: "seila9000",
+    documentId: "44499944488",
+    address: {
+        zipCode: "99970999",
+        street: "rua treze de maio",
+        number: "90",
+        neighbourhood: "santa fe",
+        city: "sao paulo",
+        state: "sp",
+    },
 };
-exports.mockedUserReceiver = {
-    id: 'qualquerId2',
-    name: 'Marco',
-    email: 'marco@fakemail.com',
-    password: '123456',
-    documentId: '00011122233',
-    address: exports.mockedAddress2,
+exports.mockedUserReceiverOnTransfer = {
+    name: "americo da silva",
+    email: "antonielLetMePay@outlook.com",
+    password: "seila9000",
+    documentId: "55566677788",
+    address: {
+        zipCode: "88444000",
+        street: "Rua Aparecida do Norte",
+        number: "4000",
+        neighbourhood: "Paulista",
+        city: "sao paulo",
+        state: "sp",
+    },
 };
 exports.mockedUserLogin = {
-    email: 'gustavo@fakemail.com',
-    password: '123456',
+    email: "marcoLetMePay@outlook.com",
+    password: "seila9000",
 };
 exports.transactionType = {
-    withdraw: 'wd',
-    deposit: 'dp',
-    transfer: 'tf',
+    withdraw: "wd",
+    deposit: "dp",
+    transfer: "tf",
 };
 exports.mockedTransactionDeposit = {
     amount: 500,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '00011122233',
+    documentId: "44499944488",
 };
 exports.mockedTransactionDeposit2 = {
     amount: 100,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '00011122233',
+    documentId: "44499944488",
 };
 exports.mockedInvalidTransactionDeposit = {
     amount: 0,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '00011122233',
+    documentId: "44499944488",
 };
 exports.mockedInvalidTransactionDepositByReceiver = {
     amount: 250,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '00000000002',
+    documentId: "00000000002",
 };
 exports.mockedTransactionWithdraw = {
     amount: 250,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '11122233344',
+    documentId: "44499944488",
 };
 exports.mockedInvalidTransactionWithdraw = {
     amount: 0,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '11122233344',
+    documentId: "44499944488",
 };
 exports.mockedInvalidTransactionWithdrawByReceiver = {
     amount: 0,
-    receiverWalletId: 'gustavoWalletId',
-    documentId: '00000000002',
+    documentId: "00000000002",
 };
 exports.mockedTransactionTransfer = {
     amount: 250,
-    receiverDocumentId: '11122233344',
-    senderDocumentId: '22211100034',
-    senderWalletId: 'senderWalletId',
+    receiverDocumentId: "55566677788",
+    senderDocumentId: "44499944488",
 };
 exports.mockedInvalidTransactionTransferByAmount = {
     amount: 0,
-    receiverDocumentId: '22211100034',
-    senderDocumentId: '11122233344',
-    senderWalletId: 'senderWalletId',
+    receiverDocumentId: "55566677788",
+    senderDocumentId: "44499944488",
 };
 exports.mockedInvalidTransactionTransferBySender = {
-    amount: 0,
-    receiverDocumentId: '22211100034',
-    senderDocumentId: '00000000002',
-    senderWalletId: 'senderWalletId',
+    amount: 50,
+    receiverDocumentId: "55566677788",
+    senderDocumentId: "444",
 };
 exports.mockedInvalidTransactionTransferByReceiver = {
-    amount: 0,
-    receiverDocumentId: '00000000001',
-    senderDocumentId: '11122233344',
-    senderWalletId: 'senderWalletId',
+    amount: 50,
+    receiverDocumentId: "12",
+    senderDocumentId: "44499944488",
 };

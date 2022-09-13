@@ -17,7 +17,6 @@ const handleErrorMiddleware = (error, req, res, next) => __awaiter(void 0, void 
             message: error.message,
         });
     }
-    console.error(error);
     return res.status(500).json({
         message: "An internal error occured",
     });

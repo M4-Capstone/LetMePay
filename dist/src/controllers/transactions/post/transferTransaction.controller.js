@@ -12,16 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferTransactionController = void 0;
 const transferTransaction_service_1 = require("../../../services/transactions/transferTransaction.service");
 const transferTransactionController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { amount, receiverDocumentId, senderWalletId, senderDocumentId } = req.body;
+    const { amount, receiverDocumentId, senderDocumentId } = req.body;
+    const senderId = req.user.id;
     yield (0, transferTransaction_service_1.transferTransactionService)({
         amount,
         receiverDocumentId,
-        senderWalletId,
         senderDocumentId,
-    });
+    }, senderId);
     return res.json({
-        message: 'Transaction successfully created',
-        status: 'Receipt sent to customers email',
+        message: "Transfer transaction successfully created",
+        status: "Receipt sent to customers email",
     });
 });
 exports.transferTransactionController = transferTransactionController;

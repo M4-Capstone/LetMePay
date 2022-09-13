@@ -9,15 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.depositTransactionController = void 0;
-const depositTransaction_service_1 = require("../../../services/transactions/depositTransaction.service");
-const depositTransactionController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { amount, documentId } = req.body;
-    const receiverId = req.user.id;
-    yield (0, depositTransaction_service_1.depositTransactionService)({ amount, documentId }, receiverId);
-    return res.json({
-        message: "Deposit transaction successfully created",
-        status: "Receipt sent to customers email",
-    });
+exports.validateSchemaMiddleware = void 0;
+const validateSchemaMiddleware = (schema) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const data = req.body;
+        const validated = yield schema.validate(data, {
+            stripUnknown: true,
+        });
+        req.body = validated;
+        next();
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: (_a = error.errors) === null || _a === void 0 ? void 0 : _a.join(", "),
+        });
+    }
 });
-exports.depositTransactionController = depositTransactionController;
+exports.validateSchemaMiddleware = validateSchemaMiddleware;

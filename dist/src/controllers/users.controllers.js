@@ -46,19 +46,19 @@ exports.createUserController = createUserController;
 const getUserKeywordController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { keyword } = req.params;
     const user = yield (0, getUserByKeyword_service_1.default)(keyword);
-    return res.json(user);
+    return res.json((0, class_transformer_1.instanceToPlain)(user));
 });
 exports.getUserKeywordController = getUserKeywordController;
 const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.user.id;
-    const deleteUser = yield (0, deleteUser_service_1.deleteUserService)(id);
+    const { id } = req.user;
+    const deleteUser = yield (0, deleteUser_service_1.deleteUserService)({ id });
     return res.status(204).send();
 });
 exports.deleteUserController = deleteUserController;
 const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.user.id;
-    const { name, email, password } = req.body;
-    const updateUser = yield (0, updateUser_service_1.updateUserService)(id, { name, email, password });
+    const { name, email, password, address } = req.body;
+    const updateUser = yield (0, updateUser_service_1.updateUserService)(id, { name, email, password, address });
     return res.json((0, class_transformer_1.instanceToPlain)(updateUser));
 });
 exports.updateUserController = updateUserController;

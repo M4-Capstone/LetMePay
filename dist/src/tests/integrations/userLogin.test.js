@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const data_source_1 = __importDefault(require("../../data-source"));
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
-const mocks_1 = require("../mocks");
-describe('/login', () => {
+const index_1 = require("../mocks/index");
+describe("/login", () => {
     let connection;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield data_source_1.default.initialize()
@@ -24,22 +24,39 @@ describe('/login', () => {
             connection = res;
         })
             .catch((err) => {
-            console.error('Error during Data Source initialization', err);
+            console.log("Error during Data Source initialization", err);
         });
-        yield (0, supertest_1.default)(app_1.default).post('/users').send(mocks_1.mockedUser);
+        yield (0, supertest_1.default)(app_1.default).post("/users").send(index_1.mockedUser);
     }));
-    test('POST /login - should be able to login with the user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(mocks_1.mockedUserLogin);
-        expect(response.body).toHaveProperty('token');
+    test("POST /login - Should be able to login with the user", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post("/login").send(index_1.mockedUserLogin);
+        expect(response.body).toHaveProperty("token");
         expect(response.status).toBe(200);
     }));
-    test('POST /login - should not be able to login with the user with incorrect password or email', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send({
-            email: 'felipe@mail.com',
-            password: '123456',
-        });
-        expect(response.body).toHaveProperty('message');
-        expect(response.status).toBe(403);
+    test("POST /login - Should not be able to login with the user with incorrect password", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(index_1.mockedUserIncorrectLoginPassword);
+        expect(response.body).toHaveProperty("message");
+        expect(response.statusCode).toBe(401);
+    }));
+    test("POST /login - Should not be able to login with the user with incorrect email", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(index_1.mockedUserIncorrectLoginEmail);
+        expect(response.body).toHaveProperty("message");
+        expect(response.statusCode).toBe(401);
+    }));
+    test("POST /login - Should not be able to login without field password", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(index_1.mockedUserWithoutPassword);
+        expect(response.body).toHaveProperty("message");
+        expect(response.statusCode).toBe(400);
+    }));
+    test("POST /login - Should not be able to login without field email", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(index_1.mockedUserWithoutEmail);
+        expect(response.body).toHaveProperty("message");
+        expect(response.statusCode).toBe(400);
+    }));
+    test("POST /login - Should not be able to login without register", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app_1.default).post('/login').send(index_1.mockedUserWithoutRegister);
+        expect(response.body).toHaveProperty("message");
+        expect(response.statusCode).toBe(401);
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield connection.destroy();

@@ -19,18 +19,21 @@ const transactions_entity_1 = __importDefault(require("../../entities/transactio
 const users_entity_1 = __importDefault(require("../../entities/users.entity"));
 const wallets_entity_1 = __importDefault(require("../../entities/wallets.entity"));
 const AppError_1 = require("../../errors/AppError");
+const convertToPdfAndSend_1 = __importDefault(require("../../utils/emailManager/convertToPdfAndSend"));
 const transactionRepository = data_source_1.default.getRepository(transactions_entity_1.default);
 const walletRepository = data_source_1.default.getRepository(wallets_entity_1.default);
 const userRepository = data_source_1.default.getRepository(users_entity_1.default);
 const categoryRepository = data_source_1.default.getRepository(transactionCategories_entity_1.default);
-const depositTransactionService = ({ amount, receiverWalletId, documentId, }) => __awaiter(void 0, void 0, void 0, function* () {
-    const receiver = yield walletRepository.findOneBy({ id: receiverWalletId });
-    const user = yield userRepository.findOneBy({ documentId });
+const depositTransactionService = ({ amount, documentId }, receiverId) => __awaiter(void 0, void 0, void 0, function* () {
+    const receiver = yield userRepository.findOneBy({ documentId: receiverId });
     const transactionType = yield categoryRepository.findOneBy({ type: "dp" });
-    if (!user || !receiver || !transactionType) {
+    const receiverWallet = yield walletRepository.findOneBy({
+        id: receiver === null || receiver === void 0 ? void 0 : receiver.wallet.id,
+    });
+    if (!receiver || !receiverWallet || !transactionType) {
         throw new AppError_1.AppError("Wallet or user not found", 404);
     }
-    if (user.wallet.id !== receiver.id) {
+    if (receiver.documentId !== documentId) {
         throw new AppError_1.AppError("The wallet does not belong to this user", 403);
     }
     if (amount < 1) {
@@ -41,16 +44,18 @@ const depositTransactionService = ({ amount, receiverWalletId, documentId, }) =>
     const transaction = {
         amount,
         categoryType: transactionType,
-        receiverWallet: receiver,
+        receiverWallet: receiverWallet,
     };
     let deposit = transactionRepository.create(Object.assign(Object.assign({}, transaction), { date: date, hour: hour }));
     deposit = yield transactionRepository.save(deposit);
-    receiver.amount = +receiver.amount + amount;
+    receiverWallet.amount = +receiverWallet.amount + amount;
     yield walletRepository.update({
-        id: receiver.id,
-    }, receiver);
-    //   await sendReceiptToClientEmail('deposit',_,_)
-    //   import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
+        id: receiverWallet.id,
+    }, receiverWallet);
+    const receiptData = Object.assign(Object.assign({}, deposit), { amount: deposit.amount.toFixed(2), receiver: {
+            name: receiver.name,
+        } });
+    yield (0, convertToPdfAndSend_1.default)("deposit", receiptData, receiver.email, receiver.name);
     return deposit;
 });
 exports.depositTransactionService = depositTransactionService;

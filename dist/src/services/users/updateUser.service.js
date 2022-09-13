@@ -40,19 +40,29 @@ const data_source_1 = __importDefault(require("../../data-source"));
 const users_entity_1 = __importDefault(require("../../entities/users.entity"));
 const AppError_1 = require("../../errors/AppError");
 const bcrypt = __importStar(require("bcryptjs"));
-const updateUserService = (id, { name, email, password }) => __awaiter(void 0, void 0, void 0, function* () {
+const addresses_entity_1 = __importDefault(require("../../entities/addresses.entity"));
+const updateUserService = (id, { name, email, password, address }) => __awaiter(void 0, void 0, void 0, function* () {
     const userRepository = data_source_1.default.getRepository(users_entity_1.default);
+    const addressRepository = data_source_1.default.getRepository(addresses_entity_1.default);
     const findUser = yield userRepository.findOneBy({ documentId: id });
     if (!findUser) {
         throw new AppError_1.AppError("User not found", 404);
     }
-    if (!bcrypt.compare(findUser.password, password)) {
-        throw new AppError_1.AppError("Please enter a different password");
+    if (!findUser.isActive) {
+        throw new AppError_1.AppError("User not active", 400);
     }
-    const hashedPassword = yield bcrypt.hash(password, 10);
+    if (password) {
+        if (!bcrypt.compare(findUser.password, password)) {
+            throw new AppError_1.AppError("Please enter a different password");
+        }
+        findUser.password = yield bcrypt.hash(password, 10);
+    }
+    if (address) {
+        yield addressRepository.update({ id: findUser.address.id }, address);
+    }
     yield userRepository.update({ documentId: id }, {
         name: name ? name : findUser.name,
-        password: password ? hashedPassword : findUser.password,
+        password: findUser.password,
         email: email ? email : findUser.email
     });
     const findUserUpdated = yield userRepository.findOneBy({ documentId: id });

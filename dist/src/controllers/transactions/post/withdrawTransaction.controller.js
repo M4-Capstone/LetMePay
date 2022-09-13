@@ -12,14 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.withdrawTransactionController = void 0;
 const withdrawTransaction_service_1 = require("../../../services/transactions/withdrawTransaction.service");
 const withdrawTransactionController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { amount, receiverWalletId, documentId } = req.body;
+    const { amount, documentId } = req.body;
+    const receiverId = req.user.id;
     yield (0, withdrawTransaction_service_1.withdrawTransactionService)({
         amount,
-        receiverWalletId,
-        documentId,
-    });
+        documentId
+    }, receiverId);
     return res.json({
-        message: 'Transaction successfully created',
+        message: 'Withdraw transaction successfully created',
         status: 'Receipt sent to customers email',
     });
 });

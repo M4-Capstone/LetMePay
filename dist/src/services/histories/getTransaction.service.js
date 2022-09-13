@@ -12,27 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-require("dotenv/config");
-const ensureAuthMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let token = req.headers.authorization;
-    if (!token) {
-        return res.status(401).json({
-            message: "Invalid token",
-        });
-    }
-    token = token.split(" ")[1];
-    jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY, (error, decoded) => {
-        if (error) {
-            return res.status(401).json({
-                message: "Invalid token",
-            });
-        }
-        req.user = {
-            id: decoded.sub,
-            isActive: decoded.isActive,
-        };
-        next();
+const data_source_1 = __importDefault(require("../../data-source"));
+const transactions_entity_1 = __importDefault(require("../../entities/transactions.entity"));
+const AppError_1 = require("../../errors/AppError");
+const getTransactionService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const historyRepo = data_source_1.default.getRepository(transactions_entity_1.default);
+    const transaction = yield historyRepo.findOne({
+        where: { id },
+        relations: { receiverWallet: true, senderWallet: true },
     });
+    if (!transaction)
+        throw new AppError_1.AppError("There is no transaction made with this id", 404);
+    return transaction;
 });
-exports.default = ensureAuthMiddleware;
+exports.default = getTransactionService;

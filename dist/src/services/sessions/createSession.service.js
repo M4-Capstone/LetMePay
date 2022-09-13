@@ -28,6 +28,7 @@ const createSessionService = ({ email, password }) => __awaiter(void 0, void 0, 
         throw new AppError_1.AppError("Invalid email or password", 401);
     const token = jsonwebtoken_1.default.sign({
         email,
+        isActive: user.isActive,
     }, process.env.SECRET_KEY, {
         subject: user.documentId,
         expiresIn: "20m",

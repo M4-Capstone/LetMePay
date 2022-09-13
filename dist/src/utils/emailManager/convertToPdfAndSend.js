@@ -39,14 +39,14 @@ const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 require("dotenv/config");
 const acceptedTypeFormat = ["deposit", "transfer", "withdraw"];
-const sendReceiptToClientEmail = (transactionType, transaction, clientEmail) => __awaiter(void 0, void 0, void 0, function* () {
+const sendReceiptToClientEmail = (transactionType, transaction, clientEmail, author) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!acceptedTypeFormat.includes(transactionType)) {
             throw new Error("transactionType format invalid");
         }
         const filepath = path.resolve(__dirname, transactionType + ".ejs");
         const ejsModel = fs.readFileSync(filepath).toString();
-        const options = { format: "Letter" };
+        const options = { format: "A4" };
         const ejsData = ejs.render(ejsModel, { transaction });
         return yield pdf.create(ejsData, options).toStream((err, response) => {
             if (err)
@@ -65,15 +65,15 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail) => 
                 const mailOptions = {
                     from: process.env.SMTP_USER,
                     to: clientEmail,
-                    subject: "Aqui está seu comprovante",
-                    html: `<h1>${clientEmail}, Seu comprovante chegou! </h1>
+                    subject: `Let Me Pay - Aqui está seu comprovante do dia ${new Date()}`,
+                    html: `<h1>${author}, seu comprovante chegou! </h1>
                 <p>Você está recebendo o comprovante da operação realizada pelo 
                 internet banking no anexo deste email.</p>
                 <p>Esta é uma mensagem automática e não deve ser respondida.</p>
                 <br>
                 <br>
-                <p>Esse documento faz parte de um trabalho acadêmico e suas procedências são
-                de natureza fictícia.</p>`,
+                <strong><p>Esse documento faz parte de um trabalho acadêmico e suas procedências são
+                de natureza fictícia.</p></strong>`,
                     attachments: [
                         {
                             contentType: "application/pdf",
@@ -84,7 +84,9 @@ const sendReceiptToClientEmail = (transactionType, transaction, clientEmail) => 
                 };
                 transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
-                        return console.log("Error during convert" + error.message);
+                        // return console.log(
+                        //   "Error during send email process" + error.message
+                        // );
                     }
                     console.log("email successfully sent to client: " + clientEmail);
                 });

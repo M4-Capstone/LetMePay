@@ -16,7 +16,7 @@ exports.deleteUserService = void 0;
 const data_source_1 = __importDefault(require("../../data-source"));
 const users_entity_1 = __importDefault(require("../../entities/users.entity"));
 const AppError_1 = require("../../errors/AppError");
-const deleteUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUserService = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     const userRepository = data_source_1.default.getRepository(users_entity_1.default);
     const findUser = yield userRepository.findOneBy({ documentId: id });
     if (!findUser) {

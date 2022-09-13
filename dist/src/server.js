@@ -22,7 +22,7 @@ function initDb() {
             console.log("[DB] Database started successfully");
         })
             .catch((err) => {
-            console.error("[DB] An error ocurred during database initalization", err);
+            console.log("[DB] An error ocurred during database initalization", err);
         });
         app_1.default.listen(process.env.PORT || 3000, () => {
             console.log("server is running");

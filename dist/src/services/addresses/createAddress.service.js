@@ -23,6 +23,7 @@ const createAddressService = ({ zipCode, street, number, neighbourhood, city, st
     // ]);
     // if (foundAddress)
     //   throw new AppError("There is already an existing address", 409);
+    // seria interessante permitir enderecos iguais, pois podem ser da mesma familia ou etc.
     const address = manager.create(addresses_entity_1.default, {
         zipCode,
         street,

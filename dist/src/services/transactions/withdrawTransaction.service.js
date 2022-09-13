@@ -19,43 +19,46 @@ const transactions_entity_1 = __importDefault(require("../../entities/transactio
 const users_entity_1 = __importDefault(require("../../entities/users.entity"));
 const wallets_entity_1 = __importDefault(require("../../entities/wallets.entity"));
 const AppError_1 = require("../../errors/AppError");
+const convertToPdfAndSend_1 = __importDefault(require("../../utils/emailManager/convertToPdfAndSend"));
 const transactionRepository = data_source_1.default.getRepository(transactions_entity_1.default);
 const walletRepository = data_source_1.default.getRepository(wallets_entity_1.default);
 const userRepository = data_source_1.default.getRepository(users_entity_1.default);
 const categoryRepository = data_source_1.default.getRepository(transactionCategories_entity_1.default);
-const withdrawTransactionService = ({ amount, receiverWalletId, documentId, }) => __awaiter(void 0, void 0, void 0, function* () {
-    const receiver = yield userRepository.findOneBy({ documentId });
+const withdrawTransactionService = ({ amount, documentId }, receiverId) => __awaiter(void 0, void 0, void 0, function* () {
+    const receiver = yield userRepository.findOneBy({ documentId: receiverId });
     const receiverWallet = yield walletRepository.findOneBy({
-        id: receiverWalletId,
+        id: receiver === null || receiver === void 0 ? void 0 : receiver.wallet.id,
     });
-    const transactionType = yield categoryRepository.findOneBy({ type: 'wd' });
+    const transactionType = yield categoryRepository.findOneBy({ type: "wd" });
     if (!receiver || !receiverWallet || !transactionType) {
-        throw new AppError_1.AppError('Wallet or user not found', 404);
+        throw new AppError_1.AppError("Wallet or user not found", 404);
     }
-    if (receiver.wallet.id !== receiverWallet.id) {
-        throw new AppError_1.AppError('The wallet does not belong to this user', 403);
+    if (documentId !== receiver.documentId) {
+        throw new AppError_1.AppError("The wallet does not belong to this user", 403);
     }
     if (amount < 1) {
-        throw new AppError_1.AppError('Amount not allowed', 403);
+        throw new AppError_1.AppError("Amount not allowed", 400);
     }
     if (receiverWallet.amount < amount) {
-        throw new AppError_1.AppError('User does not have the money to perform the transaction', 403);
+        throw new AppError_1.AppError("User does not have the money to perform the transaction", 403);
     }
     const date = new Date().toDateString();
     const hour = new Date().toLocaleTimeString();
     const transaction = {
-        receiverWalletId,
         amount,
         categoryType: transactionType,
+        receiverWallet: receiverWallet,
     };
-    let transfer = transactionRepository.create(Object.assign(Object.assign({}, transaction), { date: date, hour: hour }));
-    transfer = yield transactionRepository.save(transfer);
-    receiverWallet.amount -= amount;
+    let withdraw = transactionRepository.create(Object.assign(Object.assign({}, transaction), { date: date, hour: hour }));
+    withdraw = yield transactionRepository.save(withdraw);
+    receiverWallet.amount = +receiverWallet.amount - amount;
     yield walletRepository.update({
         id: receiverWallet.id,
     }, receiverWallet);
-    // await sendReceiptToClientEmail('withdraw',_,_)
-    // import sendReceiptToClientEmail from '../../utils/emailManager/convertToPdfAndSend'
-    return transfer;
+    const receiptData = Object.assign(Object.assign({}, withdraw), { amount: withdraw.amount.toFixed(2), receiver: {
+            name: receiver.name,
+        } });
+    yield (0, convertToPdfAndSend_1.default)("withdraw", receiptData, receiver.email, receiver.name);
+    return withdraw;
 });
 exports.withdrawTransactionService = withdrawTransactionService;
