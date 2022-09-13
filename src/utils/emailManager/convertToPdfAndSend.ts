@@ -39,7 +39,6 @@ const sendReceiptToClientEmail = async (
     };
 
     return await pdf.create(document, options).then((response: any) => {
-
       return new Promise((res, rej) => {
         const transporter = nodemailer.createTransport({
           host: "smtp-mail.outlook.com",
@@ -78,13 +77,16 @@ const sendReceiptToClientEmail = async (
             // return console.log(
             //   "Error during send email process" + error.message
             // );
+            return rej("error");
           }
           console.log("email successfully sent to client: " + clientEmail);
           res("success");
         });
       });
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log("Error on convert process: " + err);
+  }
 };
 
 export default sendReceiptToClientEmail;
