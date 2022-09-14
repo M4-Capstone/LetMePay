@@ -40,12 +40,26 @@ const getHistoryByTypeService = (id, type, { period, startDate, endDate }) => __
                     documentId: true,
                 },
             },
-            where: {
-                date: (0, typeorm_1.MoreThanOrEqual)(date),
-                categoryType: {
-                    type,
+            where: [
+                {
+                    date: (0, typeorm_1.MoreThanOrEqual)(date),
+                    categoryType: {
+                        type,
+                    },
+                    senderId: {
+                        documentId: id,
+                    },
                 },
-            },
+                {
+                    date: (0, typeorm_1.MoreThanOrEqual)(date),
+                    categoryType: {
+                        type,
+                    },
+                    receiverId: {
+                        documentId: id,
+                    },
+                },
+            ],
             relations: {
                 senderId: true,
                 receiverId: true,
@@ -78,12 +92,26 @@ const getHistoryByTypeService = (id, type, { period, startDate, endDate }) => __
                     documentId: true,
                 },
             },
-            where: {
-                date: comparison,
-                categoryType: {
-                    type,
+            where: [
+                {
+                    date: comparison,
+                    categoryType: {
+                        type,
+                    },
+                    senderId: {
+                        documentId: id,
+                    },
                 },
-            },
+                {
+                    date: comparison,
+                    categoryType: {
+                        type,
+                    },
+                    receiverId: {
+                        documentId: id,
+                    },
+                },
+            ],
             relations: {
                 senderId: true,
                 receiverId: true,
@@ -108,11 +136,24 @@ const getHistoryByTypeService = (id, type, { period, startDate, endDate }) => __
                 documentId: true,
             },
         },
-        where: {
-            categoryType: {
-                type,
+        where: [
+            {
+                categoryType: {
+                    type,
+                },
+                senderId: {
+                    documentId: id,
+                },
             },
-        },
+            {
+                categoryType: {
+                    type,
+                },
+                receiverId: {
+                    documentId: id,
+                },
+            },
+        ],
         relations: {
             senderId: true,
             receiverId: true,

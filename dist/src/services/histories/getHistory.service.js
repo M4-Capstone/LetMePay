@@ -40,9 +40,20 @@ const getHistoryService = (id, { period, startDate, endDate }) => __awaiter(void
                     documentId: true,
                 },
             },
-            where: {
-                date: (0, typeorm_1.MoreThanOrEqual)(date),
-            },
+            where: [
+                {
+                    date: (0, typeorm_1.MoreThanOrEqual)(date),
+                    senderId: {
+                        documentId: id,
+                    },
+                },
+                {
+                    date: (0, typeorm_1.MoreThanOrEqual)(date),
+                    receiverId: {
+                        documentId: id,
+                    },
+                },
+            ],
             relations: {
                 senderId: true,
                 receiverId: true,
@@ -75,9 +86,20 @@ const getHistoryService = (id, { period, startDate, endDate }) => __awaiter(void
                     documentId: true,
                 },
             },
-            where: {
-                date: comparison,
-            },
+            where: [
+                {
+                    date: comparison,
+                    senderId: {
+                        documentId: id,
+                    },
+                },
+                {
+                    date: comparison,
+                    receiverId: {
+                        documentId: id,
+                    },
+                },
+            ],
             relations: {
                 receiverId: true,
                 senderId: true,
@@ -102,6 +124,18 @@ const getHistoryService = (id, { period, startDate, endDate }) => __awaiter(void
                 documentId: true,
             },
         },
+        where: [
+            {
+                senderId: {
+                    documentId: id,
+                },
+            },
+            {
+                receiverId: {
+                    documentId: id,
+                },
+            },
+        ],
         relations: {
             receiverId: true,
             senderId: true,

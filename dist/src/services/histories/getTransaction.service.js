@@ -30,7 +30,10 @@ const getTransactionService = (id) => __awaiter(void 0, void 0, void 0, function
                 documentId: true,
             },
         },
-        where: { id },
+        where: [
+            { id, senderId: { documentId: id } },
+            { id, receiverId: { documentId: id } },
+        ],
         relations: { receiverId: true, senderId: true },
         order: {
             date: "DESC",
