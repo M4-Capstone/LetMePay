@@ -48,7 +48,14 @@ export const updateUserService = async (
     }
   );
 
-  const findUserUpdated = await userRepository.findOneBy({ documentId: id });
+  const findUserUpdated = await userRepository.findOne({
+    where: {
+      documentId: id,
+    },
+    relations: {
+      address: true,
+    },
+  });
 
   return findUserUpdated!;
 };

@@ -70,7 +70,14 @@ const updateUserService = (id, { name, email, password, address }) => __awaiter(
         password: findUser.password,
         email: email ? email : findUser.email,
     });
-    const findUserUpdated = yield userRepository.findOneBy({ documentId: id });
+    const findUserUpdated = yield userRepository.findOne({
+        where: {
+            documentId: id,
+        },
+        relations: {
+            address: true,
+        },
+    });
     return findUserUpdated;
 });
 exports.updateUserService = updateUserService;
