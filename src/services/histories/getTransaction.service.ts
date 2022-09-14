@@ -6,8 +6,24 @@ const getTransactionService = async (id: string): Promise<Transaction> => {
   const historyRepo = AppDataSource.getRepository(Transaction);
 
   const transaction = await historyRepo.findOne({
+    select: {
+      receiverId: {
+        name: true,
+        email: true,
+        documentId: true,
+      },
+      senderId: {
+        name: true,
+        email: true,
+        documentId: true,
+      },
+    },
     where: { id },
-    relations: { receiverWallet: true, senderWallet: true },
+    relations: { receiverId: true, senderId: true },
+    order: {
+      date: "DESC",
+      hour: "DESC",
+    },
   });
   if (!transaction)
     throw new AppError("There is no transaction made with this id", 404);

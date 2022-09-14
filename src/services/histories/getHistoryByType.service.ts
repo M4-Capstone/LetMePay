@@ -20,29 +20,31 @@ const getHistoryByTypeService: TGetHistoryByType = async (
   if (period) {
     const date = DateUtils.periodToDateString(period);
     const history = await historyRepo.find({
-      where: [
-        {
-          date: MoreThanOrEqual(date),
-          senderWallet: {
-            id: userWallet.id,
-          },
-          categoryType: {
-            type,
-          },
+      select: {
+        receiverId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-        {
-          date: MoreThanOrEqual(date),
-          receiverWallet: {
-            id: userWallet.id,
-          },
-          categoryType: {
-            type,
-          },
+        senderId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-      ],
+      },
+      where: {
+        date: MoreThanOrEqual(date),
+        categoryType: {
+          type,
+        },
+      },
       relations: {
-        senderWallet: true,
-        receiverWallet: true,
+        senderId: true,
+        receiverId: true,
+      },
+      order: {
+        date: "DESC",
+        hour: "DESC",
       },
     });
 
@@ -55,29 +57,31 @@ const getHistoryByTypeService: TGetHistoryByType = async (
     else if (endDate) comparison = LessThanOrEqual(endDate);
 
     const history = await historyRepo.find({
-      where: [
-        {
-          date: comparison,
-          senderWallet: {
-            id: userWallet.id,
-          },
-          categoryType: {
-            type,
-          },
+      select: {
+        receiverId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-        {
-          date: comparison,
-          receiverWallet: {
-            id: userWallet.id,
-          },
-          categoryType: {
-            type,
-          },
+        senderId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-      ],
+      },
+      where: {
+        date: comparison,
+        categoryType: {
+          type,
+        },
+      },
       relations: {
-        senderWallet: true,
-        receiverWallet: true,
+        senderId: true,
+        receiverId: true,
+      },
+      order: {
+        date: "DESC",
+        hour: "DESC",
       },
     });
 
@@ -85,27 +89,30 @@ const getHistoryByTypeService: TGetHistoryByType = async (
   }
 
   return await historyRepo.find({
-    where: [
-      {
-        receiverWallet: {
-          id: userWallet.id,
-        },
-        categoryType: {
-          type,
-        },
+    select: {
+      receiverId: {
+        name: true,
+        email: true,
+        documentId: true,
       },
-      {
-        senderWallet: {
-          id: userWallet.id,
-        },
-        categoryType: {
-          type,
-        },
+      senderId: {
+        name: true,
+        email: true,
+        documentId: true,
       },
-    ],
+    },
+    where: {
+      categoryType: {
+        type,
+      },
+    },
     relations: {
-      senderWallet: true,
-      receiverWallet: true,
+      senderId: true,
+      receiverId: true,
+    },
+    order: {
+      date: "DESC",
+      hour: "DESC",
     },
   });
 };
