@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import TransactionCategories from "./transactionCategories.entity";
+import Users from "./users.entity";
 import Wallets from "./wallets.entity";
 
 @Entity()
@@ -32,4 +33,10 @@ export default class Transaction {
 
   @ManyToOne(() => Wallets, { nullable: true })
   senderWallet: Wallets;
+
+  @ManyToOne(() => Users,(user)=>user.receiverTransactions)
+  receiverId: Users;
+
+  @ManyToOne(() => Users, (user) => user.senderTransactions, { nullable: true })
+  senderId: Users;
 }

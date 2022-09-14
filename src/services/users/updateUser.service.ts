@@ -1,46 +1,54 @@
-import AppDataSource from "../../data-source"
-import Users from "../../entities/users.entity"
-import { AppError } from "../../errors/AppError"
-import { IUserUpdate } from "../../interfaces/users"
-import * as bcrypt from "bcryptjs"
-import Addresses from "../../entities/addresses.entity"
+import AppDataSource from "../../data-source";
+import Users from "../../entities/users.entity";
+import { AppError } from "../../errors/AppError";
+import { IUserUpdate } from "../../interfaces/users";
+import * as bcrypt from "bcryptjs";
+import Addresses from "../../entities/addresses.entity";
 
-export const updateUserService = async (id:string, {name, email, password, address}:IUserUpdate): Promise<Users> => {
+export const updateUserService = async (
+  id: string,
+  { name, email, password, address }: IUserUpdate
+): Promise<Users> => {
+  const userRepository = AppDataSource.getRepository(Users);
+  const addressRepository = AppDataSource.getRepository(Addresses);
 
-    const userRepository = AppDataSource.getRepository(Users)
-    const addressRepository = AppDataSource.getRepository(Addresses)
+  const findUser = await userRepository.findOne({
+    where: {
+      documentId: id,
+    },
+    relations: { address: true },
+  });
 
-    const findUser = await userRepository.findOneBy({documentId: id})
+  if (!findUser) {
+    throw new AppError("User not found", 404);
+  }
 
-    
-    if(!findUser){
-        throw new AppError("User not found", 404)
+  if (!findUser.isActive) {
+    throw new AppError("User not active", 400);
+  }
+
+  if (password) {
+    if (!bcrypt.compare(findUser.password, password)) {
+      throw new AppError("Please enter a different password");
     }
-    
-    if(!findUser.isActive){
-        throw new AppError("User not active", 400)
+
+    findUser.password = await bcrypt.hash(password, 10);
+  }
+
+  if (address) {
+    await addressRepository.update({ id: findUser.address.id }, address);
+  }
+
+  await userRepository.update(
+    { documentId: id },
+    {
+      name: name ? name : findUser.name,
+      password: findUser.password,
+      email: email ? email : findUser.email,
     }
+  );
 
-    if(password){
-        if(!bcrypt.compare(findUser.password, password)){
-            throw new AppError("Please enter a different password")
-        }
-    
-        findUser.password = await bcrypt.hash(password, 10)
-    }
+  const findUserUpdated = await userRepository.findOneBy({ documentId: id });
 
-    if(address){
-        await addressRepository.update({id: findUser.address.id}, address)
-    }
-
-    await userRepository.update({documentId: id}, {
-        name: name ? name : findUser.name,
-        password: findUser.password,
-        email: email ? email : findUser.email
-    })
-
-    const findUserUpdated = await userRepository.findOneBy({documentId: id})
-
-    return findUserUpdated!
-
-}
+  return findUserUpdated!;
+};

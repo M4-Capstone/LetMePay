@@ -6,6 +6,7 @@ import Wallets from "../../entities/wallets.entity";
 import { AppError } from "../../errors/AppError";
 import { ITransferTransaction } from "../../interfaces/transactions";
 import sendReceiptToClientEmail from "../../utils/emailManager/convertToPdfAndSend";
+import 'dotenv/config'
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 const walletRepository = AppDataSource.getRepository(Wallets);
@@ -61,6 +62,8 @@ export const transferTransactionService = async (
     ...transaction,
     date: date,
     hour: hour,
+    receiverId:receiver,
+    senderId:sender
   });
 
   transfer = await transactionRepository.save(transfer);
@@ -93,12 +96,14 @@ export const transferTransactionService = async (
     },
   };
 
-  await sendReceiptToClientEmail(
-    "transfer",
-    receiptData,
-    sender.email,
-    sender.name
-  );
+  process.env.NODE_ENV !== "test"
+    ? await sendReceiptToClientEmail(
+        "transfer",
+        receiptData,
+        sender.email,
+        sender.name
+      )
+    : null;
 
   return transfer;
 };

@@ -5,8 +5,14 @@ import { AppError } from "../../errors/AppError";
 const getCurrentUserService = async (id: string): Promise<Users> => {
   const userRepository = AppDataSource.getRepository(Users);
 
-  const findUser = await userRepository.findOneBy({
-    documentId: id,
+  const findUser = await userRepository.findOne({
+    where:{
+      documentId: id,
+    },
+    relations:{
+      address:true
+    }
+    
   });
 
   if (!findUser) {

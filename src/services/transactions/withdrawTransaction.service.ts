@@ -6,6 +6,7 @@ import Wallets from "../../entities/wallets.entity";
 import { AppError } from "../../errors/AppError";
 import { IWithdrawTransaction } from "../../interfaces/transactions";
 import sendReceiptToClientEmail from "../../utils/emailManager/convertToPdfAndSend";
+import 'dotenv/config'
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 const walletRepository = AppDataSource.getRepository(Wallets);
@@ -56,6 +57,8 @@ export const withdrawTransactionService = async (
     ...transaction,
     date: date,
     hour: hour,
+    receiverId:receiver,
+    senderId:receiver
   });
 
   withdraw = await transactionRepository.save(withdraw);
@@ -77,12 +80,14 @@ export const withdrawTransactionService = async (
     },
   };
 
-  await sendReceiptToClientEmail(
-    "withdraw",
-    receiptData,
-    receiver.email,
-    receiver.name
-  );
+  process.env.NODE_ENV !== "test"
+    ? await sendReceiptToClientEmail(
+        "withdraw",
+        receiptData,
+        receiver.email,
+        receiver.name
+      )
+    : null;
 
   return withdraw;
 };
