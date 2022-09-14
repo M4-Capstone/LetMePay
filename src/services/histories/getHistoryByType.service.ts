@@ -32,12 +32,26 @@ const getHistoryByTypeService: TGetHistoryByType = async (
           documentId: true,
         },
       },
-      where: {
-        date: MoreThanOrEqual(date),
-        categoryType: {
-          type,
+      where: [
+        {
+          date: MoreThanOrEqual(date),
+          categoryType: {
+            type,
+          },
+          senderId: {
+            documentId: id,
+          },
         },
-      },
+        {
+          date: MoreThanOrEqual(date),
+          categoryType: {
+            type,
+          },
+          receiverId: {
+            documentId: id,
+          },
+        },
+      ],
       relations: {
         senderId: true,
         receiverId: true,
@@ -69,12 +83,26 @@ const getHistoryByTypeService: TGetHistoryByType = async (
           documentId: true,
         },
       },
-      where: {
-        date: comparison,
-        categoryType: {
-          type,
+      where: [
+        {
+          date: comparison,
+          categoryType: {
+            type,
+          },
+          senderId: {
+            documentId: id,
+          },
         },
-      },
+        {
+          date: comparison,
+          categoryType: {
+            type,
+          },
+          receiverId: {
+            documentId: id,
+          },
+        },
+      ],
       relations: {
         senderId: true,
         receiverId: true,
@@ -101,11 +129,24 @@ const getHistoryByTypeService: TGetHistoryByType = async (
         documentId: true,
       },
     },
-    where: {
-      categoryType: {
-        type,
+    where: [
+      {
+        categoryType: {
+          type,
+        },
+        senderId: {
+          documentId: id,
+        },
       },
-    },
+      {
+        categoryType: {
+          type,
+        },
+        receiverId: {
+          documentId: id,
+        },
+      },
+    ],
     relations: {
       senderId: true,
       receiverId: true,

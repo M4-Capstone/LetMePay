@@ -18,7 +18,10 @@ const getTransactionService = async (id: string): Promise<Transaction> => {
         documentId: true,
       },
     },
-    where: { id },
+    where: [
+      { id, senderId: { documentId: id } },
+      { id, receiverId: { documentId: id } },
+    ],
     relations: { receiverId: true, senderId: true },
     order: {
       date: "DESC",
