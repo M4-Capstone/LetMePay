@@ -18,23 +18,28 @@ const getHistoryService: TGetHistory = async (
   if (period) {
     const date = DateUtils.periodToDateString(period);
     const history = await historyRepo.find({
-      where: [
-        {
-          date: MoreThanOrEqual(date),
-          senderWallet: {
-            id: userWallet.id,
-          },
+      select: {
+        receiverId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-        {
-          date: MoreThanOrEqual(date),
-          receiverWallet: {
-            id: userWallet.id,
-          },
+        senderId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-      ],
+      },
+      where: {
+        date: MoreThanOrEqual(date),
+      },
       relations: {
-        senderWallet: true,
-        receiverWallet: true,
+        senderId: true,
+        receiverId: true,
+      },
+      order: {
+        date: "DESC",
+        hour: "DESC",
       },
     });
 
@@ -47,54 +52,56 @@ const getHistoryService: TGetHistory = async (
     else if (endDate) comparison = LessThanOrEqual(endDate);
 
     const history = await historyRepo.find({
-      where: [
-        {
-          date: comparison,
-          senderWallet: {
-            id: userWallet.id,
-          },
+      select: {
+        receiverId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-        {
-          date: comparison,
-          receiverWallet: {
-            id: userWallet.id,
-          },
+        senderId: {
+          name: true,
+          email: true,
+          documentId: true,
         },
-      ],
+      },
+      where: {
+        date: comparison,
+      },
       relations: {
-        senderWallet: true,
-        receiverWallet: true,
+        receiverId: true,
+        senderId: true,
+      },
+      order: {
+        date: "DESC",
+        hour: "DESC",
       },
     });
 
     return history;
   }
 
- return await historyRepo.find({
-    select:{
-       receiverId:{
-        name:true,
-        email:true,
-        documentId:true,
-        
-       },
-       senderId:{
-        name:true,
-        email:true,
-        documentId:true,
-       },
-       
+  return await historyRepo.find({
+    select: {
+      receiverId: {
+        name: true,
+        email: true,
+        documentId: true,
+      },
+      senderId: {
+        name: true,
+        email: true,
+        documentId: true,
+      },
     },
-    relations:{
-      receiverId:true,
-      senderId:true
+    relations: {
+      receiverId: true,
+      senderId: true,
     },
     order: {
-      date:"DESC",
-      hour:"DESC"
-    }
-  })
-
+      date: "DESC",
+      hour: "DESC",
+    },
+  });
 };
 
 export default getHistoryService;
