@@ -38,7 +38,15 @@ const createUserService = async ({
     manager.save(user);
   });
 
-  const finalUser = await userRepo.findOneByOrFail({ documentId });
+  // const finalUser = await userRepo.findOneByOrFail({ documentId });
+  const finalUser = await userRepo.findOne({
+    where: {
+      documentId,
+    },
+    relations: {
+      address: true,
+    },
+  });
   return finalUser;
 };
 
