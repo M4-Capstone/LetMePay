@@ -6,7 +6,9 @@ const getUserbyKeywordService = async (keyword: string): Promise<Users[]> => {
   const userRepository = AppDataSource.getRepository(Users);
 
   const user = await userRepository.find({
-    where: [{ documentId: keyword }, { name: keyword }, { email: keyword }],
+    where: [{ documentId: keyword }, { name: keyword }, { email: keyword }],relations:{
+      address:true
+    }
   });
 
   if (!user) {

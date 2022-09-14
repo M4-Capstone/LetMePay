@@ -5,7 +5,6 @@ import Users from "../../entities/users.entity";
 import { AppError } from "../../errors/AppError";
 import { TGetHistory } from "../../interfaces/histories";
 import DateUtils from "../../utils/DateUtils";
-
 const getHistoryService: TGetHistory = async (
   id,
   { period, startDate, endDate }
@@ -71,24 +70,31 @@ const getHistoryService: TGetHistory = async (
     return history;
   }
 
-  return await historyRepo.find({
-    where: [
-      {
-        receiverWallet: {
-          id: userWallet.id,
-        },
-      },
-      {
-        senderWallet: {
-          id: userWallet.id,
-        },
-      },
-    ],
-    relations: {
-      senderWallet: true,
-      receiverWallet: true,
+ return await historyRepo.find({
+    select:{
+       receiverId:{
+        name:true,
+        email:true,
+        documentId:true,
+        
+       },
+       senderId:{
+        name:true,
+        email:true,
+        documentId:true,
+       },
+       
     },
-  });
+    relations:{
+      receiverId:true,
+      senderId:true
+    },
+    order: {
+      date:"DESC",
+      hour:"DESC"
+    }
+  })
+
 };
 
 export default getHistoryService;
