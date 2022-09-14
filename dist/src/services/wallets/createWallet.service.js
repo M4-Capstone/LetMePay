@@ -13,24 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_source_1 = __importDefault(require("../../data-source"));
-const users_entity_1 = __importDefault(require("../../entities/users.entity"));
-const AppError_1 = require("../../errors/AppError");
-const getCurrentUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const userRepository = data_source_1.default.getRepository(users_entity_1.default);
-    const findUser = yield userRepository.findOne({
-        where: {
-            documentId: id,
-        },
-        relations: {
-            address: true
-        }
+const wallets_entity_1 = __importDefault(require("../../entities/wallets.entity"));
+const createWalletService = ({ ownerDocument }, customManager) => __awaiter(void 0, void 0, void 0, function* () {
+    const walletRepo = data_source_1.default.getRepository(wallets_entity_1.default);
+    const manager = customManager || walletRepo.manager;
+    /* const foundWallet = await walletRepo.findOneBy({
+      owner: { documentId: ownerDocument },
     });
-    if (!findUser) {
-        throw new AppError_1.AppError("User not found", 404);
-    }
-    if (!(findUser === null || findUser === void 0 ? void 0 : findUser.isActive)) {
-        throw new AppError_1.AppError("User inactive", 404);
-    }
-    return findUser;
+    if (foundWallet)
+      throw new AppError(
+        "There is already an existing wallet for this user",
+        409
+      ); */
+    //const user = await getCurrentUserService(ownerDocument);
+    const wallet = manager.create(wallets_entity_1.default);
+    const savedWallet = yield manager.save(wallet);
+    return savedWallet;
 });
-exports.default = getCurrentUserService;
+exports.default = createWalletService;

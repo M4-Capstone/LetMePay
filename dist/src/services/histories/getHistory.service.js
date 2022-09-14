@@ -28,23 +28,28 @@ const getHistoryService = (id, { period, startDate, endDate }) => __awaiter(void
     if (period) {
         const date = DateUtils_1.default.periodToDateString(period);
         const history = yield historyRepo.find({
-            where: [
-                {
-                    date: (0, typeorm_1.MoreThanOrEqual)(date),
-                    senderWallet: {
-                        id: userWallet.id,
-                    },
+            select: {
+                receiverId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-                {
-                    date: (0, typeorm_1.MoreThanOrEqual)(date),
-                    receiverWallet: {
-                        id: userWallet.id,
-                    },
+                senderId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-            ],
+            },
+            where: {
+                date: (0, typeorm_1.MoreThanOrEqual)(date),
+            },
             relations: {
-                senderWallet: true,
-                receiverWallet: true,
+                senderId: true,
+                receiverId: true,
+            },
+            order: {
+                date: "DESC",
+                hour: "DESC",
             },
         });
         return history;
@@ -58,43 +63,52 @@ const getHistoryService = (id, { period, startDate, endDate }) => __awaiter(void
         else if (endDate)
             comparison = (0, typeorm_1.LessThanOrEqual)(endDate);
         const history = yield historyRepo.find({
-            where: [
-                {
-                    date: comparison,
-                    senderWallet: {
-                        id: userWallet.id,
-                    },
+            select: {
+                receiverId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-                {
-                    date: comparison,
-                    receiverWallet: {
-                        id: userWallet.id,
-                    },
+                senderId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-            ],
+            },
+            where: {
+                date: comparison,
+            },
             relations: {
-                senderWallet: true,
-                receiverWallet: true,
+                receiverId: true,
+                senderId: true,
+            },
+            order: {
+                date: "DESC",
+                hour: "DESC",
             },
         });
         return history;
     }
     return yield historyRepo.find({
-        where: [
-            {
-                receiverWallet: {
-                    id: userWallet.id,
-                },
+        select: {
+            receiverId: {
+                name: true,
+                email: true,
+                documentId: true,
             },
-            {
-                senderWallet: {
-                    id: userWallet.id,
-                },
+            senderId: {
+                name: true,
+                email: true,
+                documentId: true,
             },
-        ],
+        },
         relations: {
-            senderWallet: true,
-            receiverWallet: true,
+            receiverId: true,
+            senderId: true,
+        },
+        order: {
+            date: "DESC",
+            hour: "DESC",
         },
     });
 });

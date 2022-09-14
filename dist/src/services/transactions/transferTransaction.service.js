@@ -20,6 +20,7 @@ const users_entity_1 = __importDefault(require("../../entities/users.entity"));
 const wallets_entity_1 = __importDefault(require("../../entities/wallets.entity"));
 const AppError_1 = require("../../errors/AppError");
 const convertToPdfAndSend_1 = __importDefault(require("../../utils/emailManager/convertToPdfAndSend"));
+require("dotenv/config");
 const transactionRepository = data_source_1.default.getRepository(transactions_entity_1.default);
 const walletRepository = data_source_1.default.getRepository(wallets_entity_1.default);
 const userRepository = data_source_1.default.getRepository(users_entity_1.default);
@@ -55,7 +56,7 @@ const transferTransactionService = ({ amount, receiverDocumentId, senderDocument
         receiverWallet: receiver.wallet,
         senderWallet: senderWallet,
     };
-    let transfer = transactionRepository.create(Object.assign(Object.assign({}, transaction), { date: date, hour: hour }));
+    let transfer = transactionRepository.create(Object.assign(Object.assign({}, transaction), { date: date, hour: hour, receiverId: receiver, senderId: sender }));
     transfer = yield transactionRepository.save(transfer);
     senderWallet.amount = +senderWallet.amount - amount;
     receiver.wallet.amount = +receiver.wallet.amount + amount;
@@ -70,7 +71,9 @@ const transferTransactionService = ({ amount, receiverDocumentId, senderDocument
         }, receiver: {
             name: receiver.name,
         } });
-    yield (0, convertToPdfAndSend_1.default)("transfer", receiptData, sender.email, sender.name);
+    process.env.NODE_ENV !== "test"
+        ? yield (0, convertToPdfAndSend_1.default)("transfer", receiptData, sender.email, sender.name)
+        : null;
     return transfer;
 });
 exports.transferTransactionService = transferTransactionService;

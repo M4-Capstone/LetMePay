@@ -28,29 +28,31 @@ const getHistoryByTypeService = (id, type, { period, startDate, endDate }) => __
     if (period) {
         const date = DateUtils_1.default.periodToDateString(period);
         const history = yield historyRepo.find({
-            where: [
-                {
-                    date: (0, typeorm_1.MoreThanOrEqual)(date),
-                    senderWallet: {
-                        id: userWallet.id,
-                    },
-                    categoryType: {
-                        type,
-                    },
+            select: {
+                receiverId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-                {
-                    date: (0, typeorm_1.MoreThanOrEqual)(date),
-                    receiverWallet: {
-                        id: userWallet.id,
-                    },
-                    categoryType: {
-                        type,
-                    },
+                senderId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-            ],
+            },
+            where: {
+                date: (0, typeorm_1.MoreThanOrEqual)(date),
+                categoryType: {
+                    type,
+                },
+            },
             relations: {
-                senderWallet: true,
-                receiverWallet: true,
+                senderId: true,
+                receiverId: true,
+            },
+            order: {
+                date: "DESC",
+                hour: "DESC",
             },
         });
         return history;
@@ -64,55 +66,60 @@ const getHistoryByTypeService = (id, type, { period, startDate, endDate }) => __
         else if (endDate)
             comparison = (0, typeorm_1.LessThanOrEqual)(endDate);
         const history = yield historyRepo.find({
-            where: [
-                {
-                    date: comparison,
-                    senderWallet: {
-                        id: userWallet.id,
-                    },
-                    categoryType: {
-                        type,
-                    },
+            select: {
+                receiverId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-                {
-                    date: comparison,
-                    receiverWallet: {
-                        id: userWallet.id,
-                    },
-                    categoryType: {
-                        type,
-                    },
+                senderId: {
+                    name: true,
+                    email: true,
+                    documentId: true,
                 },
-            ],
+            },
+            where: {
+                date: comparison,
+                categoryType: {
+                    type,
+                },
+            },
             relations: {
-                senderWallet: true,
-                receiverWallet: true,
+                senderId: true,
+                receiverId: true,
+            },
+            order: {
+                date: "DESC",
+                hour: "DESC",
             },
         });
         return history;
     }
     return yield historyRepo.find({
-        where: [
-            {
-                receiverWallet: {
-                    id: userWallet.id,
-                },
-                categoryType: {
-                    type,
-                },
+        select: {
+            receiverId: {
+                name: true,
+                email: true,
+                documentId: true,
             },
-            {
-                senderWallet: {
-                    id: userWallet.id,
-                },
-                categoryType: {
-                    type,
-                },
+            senderId: {
+                name: true,
+                email: true,
+                documentId: true,
             },
-        ],
+        },
+        where: {
+            categoryType: {
+                type,
+            },
+        },
         relations: {
-            senderWallet: true,
-            receiverWallet: true,
+            senderId: true,
+            receiverId: true,
+        },
+        order: {
+            date: "DESC",
+            hour: "DESC",
         },
     });
 });

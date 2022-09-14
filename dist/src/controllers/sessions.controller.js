@@ -12,25 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const data_source_1 = __importDefault(require("../../data-source"));
-const users_entity_1 = __importDefault(require("../../entities/users.entity"));
-const AppError_1 = require("../../errors/AppError");
-const getCurrentUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const userRepository = data_source_1.default.getRepository(users_entity_1.default);
-    const findUser = yield userRepository.findOne({
-        where: {
-            documentId: id,
-        },
-        relations: {
-            address: true
-        }
-    });
-    if (!findUser) {
-        throw new AppError_1.AppError("User not found", 404);
-    }
-    if (!(findUser === null || findUser === void 0 ? void 0 : findUser.isActive)) {
-        throw new AppError_1.AppError("User inactive", 404);
-    }
-    return findUser;
+exports.createSessionController = void 0;
+const createSession_service_1 = __importDefault(require("../services/sessions/createSession.service"));
+const createSessionController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const token = yield (0, createSession_service_1.default)({ email, password });
+    return res.json({ token });
 });
-exports.default = getCurrentUserService;
+exports.createSessionController = createSessionController;

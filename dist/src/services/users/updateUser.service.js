@@ -44,7 +44,12 @@ const addresses_entity_1 = __importDefault(require("../../entities/addresses.ent
 const updateUserService = (id, { name, email, password, address }) => __awaiter(void 0, void 0, void 0, function* () {
     const userRepository = data_source_1.default.getRepository(users_entity_1.default);
     const addressRepository = data_source_1.default.getRepository(addresses_entity_1.default);
-    const findUser = yield userRepository.findOneBy({ documentId: id });
+    const findUser = yield userRepository.findOne({
+        where: {
+            documentId: id,
+        },
+        relations: { address: true },
+    });
     if (!findUser) {
         throw new AppError_1.AppError("User not found", 404);
     }
@@ -63,7 +68,7 @@ const updateUserService = (id, { name, email, password, address }) => __awaiter(
     yield userRepository.update({ documentId: id }, {
         name: name ? name : findUser.name,
         password: findUser.password,
-        email: email ? email : findUser.email
+        email: email ? email : findUser.email,
     });
     const findUserUpdated = yield userRepository.findOneBy({ documentId: id });
     return findUserUpdated;

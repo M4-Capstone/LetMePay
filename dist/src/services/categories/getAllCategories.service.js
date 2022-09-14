@@ -13,32 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_source_1 = __importDefault(require("../../data-source"));
-const transactions_entity_1 = __importDefault(require("../../entities/transactions.entity"));
+const transactionCategories_entity_1 = __importDefault(require("../../entities/transactionCategories.entity"));
 const AppError_1 = require("../../errors/AppError");
-const getTransactionService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const historyRepo = data_source_1.default.getRepository(transactions_entity_1.default);
-    const transaction = yield historyRepo.findOne({
-        select: {
-            receiverId: {
-                name: true,
-                email: true,
-                documentId: true,
-            },
-            senderId: {
-                name: true,
-                email: true,
-                documentId: true,
-            },
-        },
-        where: { id },
-        relations: { receiverId: true, senderId: true },
-        order: {
-            date: "DESC",
-            hour: "DESC",
-        },
-    });
-    if (!transaction)
-        throw new AppError_1.AppError("There is no transaction made with this id", 404);
-    return transaction;
+const getAllCategoriesService = () => __awaiter(void 0, void 0, void 0, function* () {
+    const transactionRepository = data_source_1.default.getRepository(transactionCategories_entity_1.default);
+    const res = transactionRepository.find();
+    if (!res) {
+        throw new AppError_1.AppError("invalid search");
+    }
+    return res;
 });
-exports.default = getTransactionService;
+exports.default = getAllCategoriesService;
