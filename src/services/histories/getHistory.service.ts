@@ -30,9 +30,20 @@ const getHistoryService: TGetHistory = async (
           documentId: true,
         },
       },
-      where: {
-        date: MoreThanOrEqual(date),
-      },
+      where: [
+        {
+          date: MoreThanOrEqual(date),
+          senderId: {
+            documentId: id,
+          },
+        },
+        {
+          date: MoreThanOrEqual(date),
+          receiverId: {
+            documentId: id,
+          },
+        },
+      ],
       relations: {
         senderId: true,
         receiverId: true,
@@ -64,9 +75,20 @@ const getHistoryService: TGetHistory = async (
           documentId: true,
         },
       },
-      where: {
-        date: comparison,
-      },
+      where: [
+        {
+          date: comparison,
+          senderId: {
+            documentId: id,
+          },
+        },
+        {
+          date: comparison,
+          receiverId: {
+            documentId: id,
+          },
+        },
+      ],
       relations: {
         receiverId: true,
         senderId: true,
@@ -93,6 +115,18 @@ const getHistoryService: TGetHistory = async (
         documentId: true,
       },
     },
+    where: [
+      {
+        senderId: {
+          documentId: id,
+        },
+      },
+      {
+        receiverId: {
+          documentId: id,
+        },
+      },
+    ],
     relations: {
       receiverId: true,
       senderId: true,
