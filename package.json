@@ -41,6 +41,7 @@
 		"pdf-creator-node": "^2.3.5",
 		"pg": "^8.8.0",
 		"reflect-metadata": "^0.1.13",
+		"ts-jest": "^29.0.1",
 		"typeorm": "^0.3.9",
 		"uuid": "^9.0.0",
 		"yup": "^0.32.11"
