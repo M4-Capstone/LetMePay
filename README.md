@@ -1,9 +1,10 @@
 
+
+
 <p align="center">
-![MIT License](https://img.shields.io/badge/Tech-JavaScript%20%20%20%20%20%20%20-yellow)
-![MIT License](https://img.shields.io/badge/Tech-TypeScript-blue)
-![MIT License](https://img.shields.io/badge/Tech-Node.js-green)
-![MIT License](https://img.shields.io/badge/Tech-express-lightgrey)
+<img src="https://img.shields.io/badge/Tech-JavaScript%20%20%20%20%20%20%20-yellow">
+<img src="https://img.shields.io/badge/Tech-TypeScript-blue">
+<img src="https://img.shields.io/badge/Tech-express-lightgrey">
 </p>
 
 
